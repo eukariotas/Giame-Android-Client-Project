@@ -1,4 +1,4 @@
-package es.eukariotas.giame;
+package es.eukariotas.giame.game.Aviones;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
