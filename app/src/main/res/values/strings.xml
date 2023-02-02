@@ -16,4 +16,7 @@
     <string name="login">login</string>
     <string name="singIn" />
     <string name="sing">sing in</string>
+    <string name="enRaya">3 en ralla</string>
+    <string name="Ajedrez">Ajedrez</string>
+    <string name="Avioncitos" >Avioncitos</string>
 </resources>
