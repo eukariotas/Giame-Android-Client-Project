@@ -1,42 +1,35 @@
-package es.eukariotas.giame
+package es.eukariotas.giame.ui
 
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
+import es.eukariotas.giame.R
+import es.eukariotas.giame.databinding.FragmentSecondBinding
 
+class SecondFragment : Fragment() {
+    var playerTurn = true
+    private var _binding: FragmentSecondBinding? = null
+    private val binding get() = _binding!!
 
-var playerTurn = true
-var player1 = ArrayList<Int>()
-var player2 = ArrayList<Int>()
-
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
-class SecondFragment : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-
-        button10.setOnClickListener {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        return binding.root
+        binding.button10.setOnClickListener {
             reset()
-
         }
     }
-
 
     var player1Count = 0
     var player2Count = 0
 
 
-    fun clickfun(view:View)
-    {
+    fun clickfun(view:View){
         if(playerTurn) {
             val but = view as Button
             var cellID = 0

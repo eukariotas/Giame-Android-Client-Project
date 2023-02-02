@@ -1,4 +1,4 @@
-package es.eukariotas.giame
+package es.eukariotas.giame.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
