@@ -1,4 +1,4 @@
-package es.eukariotas.giame.ui
+package es.eukariotas.giame
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -32,7 +32,9 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        binding.button.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
     }
 
     override fun onDestroyView() {
