@@ -88,7 +88,8 @@ class SecondFragment: Fragment(){
                 Handler().postDelayed(Runnable { reset() } , 2000)
             }
             else if(singleUser){
-                Handler().postDelayed(Runnable { robot() } , 500)
+                Handler().postDelayed(Runnable {
+                    robot() } , 500)
             }
             else
                 activeUser = 2
