@@ -4,27 +4,37 @@ import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
+import es.eukariotas.giame.databinding.FragmentSecondBinding
 
 
-var playerTurn = true
-var player1 = ArrayList<Int>()
-var player2 = ArrayList<Int>()
+class SecondFragment: Fragment(){
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
-class SecondFragment : AppCompatActivity() {
+    var playerTurn = true
+
+    private var _binding: FragmentSecondBinding? = null
+
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        return binding.root
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
 
-        button10.setOnClickListener {
+        binding.button10.setOnClickListener {
             reset()
 
         }
@@ -41,15 +51,15 @@ class SecondFragment : AppCompatActivity() {
             val but = view as Button
             var cellID = 0
             when (but.id) {
-                R.id.button -> cellID = 1
-                R.id.button2 -> cellID = 2
-                R.id.button3 -> cellID = 3
-                R.id.button4 -> cellID = 4
-                R.id.button5 -> cellID = 5
-                R.id.button6 -> cellID = 6
-                R.id.button7 -> cellID = 7
-                R.id.button8 -> cellID = 8
-                R.id.button9 -> cellID = 9
+                binding.button.id -> cellID = 1
+                binding.button2.id -> cellID = 2
+                binding.button3.id -> cellID = 3
+                binding.button4.id -> cellID = 4
+                binding.button5.id -> cellID = 5
+                binding.button6.id -> cellID = 6
+                binding.button7.id -> cellID = 7
+                binding.button8.id -> cellID = 8
+                binding.button9.id -> cellID = 9
             }
             playerTurn = false;
             Handler().postDelayed(Runnable { playerTurn = true } , 600)
@@ -110,28 +120,31 @@ class SecondFragment : AppCompatActivity() {
         {
             var buttonselected : Button?
             buttonselected = when(i){
-                1 -> button
-                2 -> button2
-                3 -> button3
-                4 -> button4
-                5 -> button5
-                6 -> button6
-                7 -> button7
-                8 -> button8
-                9 -> button9
-                else -> {button}
+                1 -> binding.button
+                2 ->  binding.button2
+                3 ->  binding.button3
+                4 ->  binding.button4
+                5 ->  binding.button5
+                6 ->  binding.button6
+                7 ->  binding.button7
+                8 ->  binding.button8
+                9 ->  binding.button9
+                else -> { binding.button}
             }
             buttonselected.isEnabled = true
             buttonselected.text = ""
-            textView.text = "Player1 : $player1Count"
-            textView2.text = "Player2 : $player2Count"
+            binding.textView.text = "Player1 : $player1Count"
+            binding.textView2.text = "Player2 : $player2Count"
         }
     }
 
 
     fun disableReset()
     {
-        button10.isEnabled = false
-        Handler().postDelayed(Runnable { button10.isEnabled = true } , 2200)
+        binding.button10.isEnabled = false
+        Handler().postDelayed(Runnable {
+            binding.button10.isEnabled = true
+                                       } , 2200)
     }
 }
+
