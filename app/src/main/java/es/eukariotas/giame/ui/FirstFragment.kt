@@ -1,12 +1,13 @@
-package es.eukariotas.giame
+package es.eukariotas.giame.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import es.eukariotas.giame.databinding.FragmentFirstBinding
+import es.eukariotas.giame.game.Aviones.AndroidLauncher
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -27,14 +28,17 @@ class FirstFragment : Fragment() {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
 
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.button.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        binding.btAjedrez.setOnClickListener {
+            val intentAjedrez = Intent(context, AndroidLauncher::class.java)
+            startActivity(intentAjedrez)
         }
+
     }
 
     override fun onDestroyView() {
