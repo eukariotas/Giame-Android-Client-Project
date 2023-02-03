@@ -6,10 +6,6 @@ import es.eukariotas.giame.game.ajedrez.Object.FichaAjedrez
 class AjedrezController: ApplicationAdapter() {
     val Tablero = getTableroNuevo()
 
-
-
-
-
     /**
      * Funcion que devuelve un tablero nuevo
      */
