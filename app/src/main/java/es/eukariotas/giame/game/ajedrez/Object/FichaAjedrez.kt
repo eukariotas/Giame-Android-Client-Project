@@ -171,8 +171,4 @@ data class FichaAjedrez(
 
         return posibles
     }
-
-
-
-
 }

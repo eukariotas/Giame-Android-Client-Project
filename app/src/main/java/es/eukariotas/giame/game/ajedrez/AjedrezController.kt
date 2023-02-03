@@ -64,5 +64,4 @@ class AjedrezController: ApplicationAdapter() {
         //TODO(Devuelve si el movimiento es valido)
         return true
     }
-
 }
