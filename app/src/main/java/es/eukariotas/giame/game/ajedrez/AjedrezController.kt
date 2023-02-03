@@ -60,4 +60,9 @@ class AjedrezController: ApplicationAdapter() {
         return true
     }
 
+    fun verifyMovimiento(posicion:String):Boolean{
+        //TODO(Devuelve si el movimiento es valido)
+        return true
+    }
+
 }
