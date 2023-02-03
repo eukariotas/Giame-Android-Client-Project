@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import es.eukariotas.giame.databinding.FragmentFirstBinding
 import es.eukariotas.giame.game.Aviones.AndroidLauncher
+import es.eukariotas.giame.game.ajedrez.AjedrezController
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -35,8 +36,8 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btAjedrez.setOnClickListener {
-            val intentAjedrez = Intent(context, AndroidLauncher::class.java)
-            startActivity(intentAjedrez)
+            val ajedrezController = AjedrezController()
+            ajedrezController.mostrarTablero();
         }
 
     }
