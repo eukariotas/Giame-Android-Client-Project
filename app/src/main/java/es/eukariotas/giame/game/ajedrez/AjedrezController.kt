@@ -1,11 +1,42 @@
 package es.eukariotas.giame.game.ajedrez
 
 import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import es.eukariotas.giame.game.ajedrez.Object.CasilaAjedrez
 import es.eukariotas.giame.game.ajedrez.Object.FichaAjedrez
 
 class AjedrezController: ApplicationAdapter() {
     val tablero = getTableroNuevo()
+    lateinit var celdaNegraTexture:Texture
+    lateinit var celdaBlancaTexture:Texture
+    lateinit var batch: SpriteBatch
+    /**
+     * Función que pintará el tablero de ajedrez
+     */
+    @Override
+    override fun create() {
+        celdaBlancaTexture = Texture(Gdx.files.internal("celdaBlanca.png"))
+        celdaNegraTexture = Texture(Gdx.files.internal("celdaNegra.png"))
+        batch = SpriteBatch()
+    }
+
+    override fun render() {
+        batch.begin()
+        for (casilla in tablero.keys) {
+            if (casilla.color == "negra") {
+                batch.draw(celdaNegraTexture, 0f, 0f)
+            } else {
+                batch.draw(celdaBlancaTexture, 50f, 50f)
+            }
+        }
+        batch.end()
+    }
+    override fun dispose() {
+        celdaBlancaTexture.dispose()
+        celdaNegraTexture.dispose()
+    }
 
     /**
      * Funcion que devuelve un tablero nuevo
