@@ -1,27 +1,31 @@
 package es.eukariotas.giame.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.badlogic.gdx.backends.android.AndroidApplication
+import androidx.fragment.app.Fragment
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
-import es.eukariotas.giame.R
+import com.badlogic.gdx.backends.android.AndroidFragmentApplication
+import com.badlogic.gdx.backends.android.AndroidGraphics
 import es.eukariotas.giame.game.ajedrez.AjedrezController
 import es.eukariotas.giame.game.ajedrez.AjedrezLauncher
 
 
-class AjedrezFragment : Fragment() {
-    val ajedrezController = AjedrezController()
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        val config = AndroidApplicationConfiguration()
-        ajedrezController.create()
-        return initializeForView(ajedrezController, config)
+class AjedrezFragment : Fragment(), AndroidFragmentApplication.Callbacks {
 
+    private lateinit var ajedrezLauncher: AjedrezLauncher
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        ajedrezLauncher = AjedrezLauncher()
+        return ajedrezLauncher.initializeForView(AjedrezController(), AndroidApplicationConfiguration())
     }
 
-
-
+    override fun exit() {
+        TODO("Not yet implemented")
+    }
 }
