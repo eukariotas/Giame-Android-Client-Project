@@ -19,4 +19,5 @@
     <string name="enRaya">3 en ralla</string>
     <string name="Ajedrez">Ajedrez</string>
     <string name="Avioncitos">Avioncitos</string>
+    <string name="game_fragment_label">Game Fragment</string>
 </resources>
