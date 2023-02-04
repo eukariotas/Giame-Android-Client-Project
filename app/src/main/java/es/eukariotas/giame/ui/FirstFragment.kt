@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import es.eukariotas.giame.R
 import es.eukariotas.giame.databinding.FragmentFirstBinding
 import es.eukariotas.giame.game.Aviones.AndroidLauncher
+import es.eukariotas.giame.game.Aviones.AvionesLauncher
 import es.eukariotas.giame.game.ajedrez.AjedrezController
 import es.eukariotas.giame.game.ajedrez.AjedrezLauncher
 
@@ -40,6 +41,9 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btAvioncitos.setOnClickListener{
+            startActivity(Intent(activity, AvionesLauncher::class.java))
+        }
         binding.btAjedrez.setOnClickListener {
             val intent = Intent( activity, AjedrezLauncher::class.java)
             startActivity(intent)
