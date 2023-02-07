@@ -7,14 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
-import es.eukariotas.giame.R
 import es.eukariotas.giame.databinding.FragmentFirstBinding
-import es.eukariotas.giame.game.Aviones.AndroidLauncher
 import es.eukariotas.giame.game.Aviones.AvionesLauncher
-import es.eukariotas.giame.game.ajedrez.AjedrezController
 import es.eukariotas.giame.game.ajedrez.AjedrezLauncher
 
 /**
