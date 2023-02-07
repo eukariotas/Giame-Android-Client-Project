@@ -3,6 +3,8 @@ package es.eukariotas.giame.game.ajedrez
 import android.widget.Toast
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputAdapter
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -28,7 +30,7 @@ class AjedrezController: ApplicationAdapter() {
     lateinit var fichaReinaNegraTexture:Texture
     lateinit var fichaReyBlancoTexture:Texture
     lateinit var fichaReyNegroTexture:Texture
-
+    private var camera: OrthographicCamera? = null
     lateinit var batch:SpriteBatch
 
 
@@ -53,8 +55,31 @@ class AjedrezController: ApplicationAdapter() {
         fichaReinaNegraTexture = Texture(Gdx.files.internal("reinaNegra.png"))
         fichaReyBlancoTexture = Texture(Gdx.files.internal("reyBlanco.png"))
         fichaReyNegroTexture = Texture(Gdx.files.internal("reiNegro.png"))
-
+        camera = OrthographicCamera()
+        camera!!.setToOrtho(false, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         batch = SpriteBatch()
+        Gdx.input.inputProcessor = object : InputAdapter(){
+        override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            val x = Gdx.input.x
+            val y = (Gdx.input.y-Gdx.graphics.height)*-1
+            println("tocado en ${x} ${y}")
+            var ficha = false
+            for(sprite in spriteList){
+                if (sprite.boundingRectangle.contains(x.toFloat(),y.toFloat())){
+                    println("Tocada una ficha")
+                    ficha = true
+                }
+            }
+            if (!ficha){
+                println("Tocada una celda")
+            }
+          return true
+        }
+        override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            println("soltado")
+            return true
+        }
+        }
 
 
 
@@ -75,36 +100,48 @@ class AjedrezController: ApplicationAdapter() {
     }
 
     override fun render() {
-        if (someMove){
-        spriteList.clear()
-        batch.begin()
-        var tamañoCelda = Gdx.graphics.width.toFloat()/8
-        for (letra in 1..8){
-            for (i in 0..7){
-                val posicionX = (letra-1)*tamañoCelda
-                val posicionY = i*tamañoCelda
-                val letraLetra = getColumna(letra)
-                val poscion = "$letraLetra-${i+1}"
-                val celda = tablero.keys.find { it.posicion == poscion }!!
+        if (turno == 0) {
+            batch.begin()
+            var tamañoCelda = Gdx.graphics.width.toFloat() / 8
+            for (letra in 1..8) {
+                for (i in 0..7) {
+                    val posicionX = (letra - 1) * tamañoCelda
+                    val posicionY = i * tamañoCelda
+                    val letraLetra = getColumna(letra)
+                    val poscion = "$letraLetra-${i + 1}"
+                    val celda = tablero.keys.find { it.posicion == poscion }!!
 
-                if (celda.color == "negra"){
-                    println("negra $poscion $posicionX $posicionY")
-                    batch.draw(celdaNegraTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
-                }else{
-                    println("blanca $poscion $posicionX $posicionY")
-                    batch.draw(celdaBlancaTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
-                }
-                if (tablero.get(celda) != null) {
-                    pintarFicha(tablero.get(celda)!!,posicionX,posicionY,tamañoCelda)
+                    if (celda.color == "negra") {
+                        batch.draw(
+                            celdaNegraTexture,
+                            posicionX,
+                            posicionY,
+                            tamañoCelda,
+                            tamañoCelda
+                        )
+                    } else {
+                        batch.draw(
+                            celdaBlancaTexture,
+                            posicionX,
+                            posicionY,
+                            tamañoCelda,
+                            tamañoCelda
+                        )
+                    }
+                    if (tablero.get(celda) != null) {
+                        pintarFicha(tablero.get(celda)!!, posicionX, posicionY, tamañoCelda)
+                    }
                 }
             }
-        }
-            someMove = false
+            //incrementarTurno()
             batch.end()
         }
 
         if (Gdx.input.justTouched()) {
-            println("Tocado")
+            Gdx.input.inputProcessor.touchDown(Gdx.input.x,Gdx.input.y,0,0)
+            Gdx.input.inputProcessor.touchUp(Gdx.input.x,Gdx.input.y,0,0)
+
+
         }
     }
 
@@ -112,57 +149,102 @@ class AjedrezController: ApplicationAdapter() {
      * Función que pintará la ficha en la posición indicada
      */
     fun pintarFicha(ficha:FichaAjedrez, posicionX: Float, posicionY: Float, tamañoCelda: Float){
+        var texture:Texture? = null
         if (ficha.color == "blanco"){
             if (ficha.tipo == "peon"){
-                val sprite = Sprite(fichaPeonBlancoTexture)
+                texture = fichaPeonBlancoTexture
+                var sprite = Sprite(texture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
                 spriteList.add(sprite)
                 batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "torre"){
-                val sprite = Sprite(fichaTorreBlancaTexture)
+                texture = fichaTorreBlancaTexture
+                var sprite = Sprite(texture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
                 spriteList.add(sprite)
                 batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "caballo"){
-                val sprite = Sprite(fichaCaballoBlancoTexture)
+                texture = fichaCaballoBlancoTexture
+                var sprite = Sprite(texture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
                 spriteList.add(sprite)
                 batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "alfil"){
-                val sprite = Sprite(fichaAlfilBlancoTexture)
+                texture = fichaAlfilBlancoTexture
+                var sprite = Sprite(texture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
                 spriteList.add(sprite)
                 batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "reina"){
-                val sprite = Sprite(fichaReinaBlancaTexture)
+                texture = fichaReinaBlancaTexture
+                var sprite = Sprite(texture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
                 spriteList.add(sprite)
                 batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "rey"){
-                val sprite = Sprite(fichaReyBlancoTexture)
+                texture = fichaReyBlancoTexture
+                var sprite = Sprite(texture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
                 spriteList.add(sprite)
                 batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
         }else{
             if (ficha.tipo == "peon"){
-                batch.draw(fichaPeonNegroTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
+                var sprite = Sprite(fichaPeonNegroTexture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
+                spriteList.add(sprite)
+                batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "torre"){
-                batch.draw(fichaTorreNegraTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
+                var sprite = Sprite(fichaTorreNegraTexture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
+                spriteList.add(sprite)
+                batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "caballo"){
-                batch.draw(fichaCaballoNegroTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
+                var sprite = Sprite(fichaCaballoNegroTexture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
+                spriteList.add(sprite)
+                batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "alfil"){
-                batch.draw(fichaAlfilNegroTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
+                var sprite = Sprite(fichaAlfilNegroTexture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
+                spriteList.add(sprite)
+                batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "reina"){
-                batch.draw(fichaReinaNegraTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
+                var sprite = Sprite(fichaReinaNegraTexture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
+                spriteList.add(sprite)
+                batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
             if (ficha.tipo == "rey"){
-                batch.draw(fichaReyNegroTexture,posicionX,posicionY,tamañoCelda,tamañoCelda)
+                var sprite = Sprite(fichaReyNegroTexture)
+                sprite.setPosition(posicionX,posicionY)
+                sprite.setSize(tamañoCelda,tamañoCelda)
+                spriteList.add(sprite)
+                batch.draw(sprite,posicionX,posicionY,tamañoCelda,tamañoCelda)
             }
         }
+
+
     }
 
 
@@ -182,7 +264,7 @@ class AjedrezController: ApplicationAdapter() {
         fichaReyBlancoTexture.dispose()
         fichaReyNegroTexture.dispose()
 
-        batch.dispose()
+        batch!!.dispose()
     }
 
     /**
