@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
@@ -26,7 +27,7 @@ class AvionesController : ApplicationAdapter() {
     private var sprite: Sprite? = null
     private var camera: OrthographicCamera? = null
     private var rocket: Rectangle? = null
-    private var rainAsteroids: Array<Rectangle>? = null
+    private var asteroids: Array<Circle>? = null
     private var lastAsteroidTime: Long = 0
     private val spriteBatch: SpriteBatch? = null
     override fun create() {
@@ -54,26 +55,32 @@ class AvionesController : ApplicationAdapter() {
         // create a Rectangle to logically represent the bucket
         rocket = Rectangle()
         rocket!!.x = (800 / 2 - 64 / 2).toFloat() // center the bucket horizontally
-        rocket!!.y =
-            20f // bottom left corner of the bucket is 20 pixels above the bottom screen edge
+        rocket!!.y = 20f // bottom left corner of the bucket is 20 pixels above the bottom screen edge
         rocket!!.width = 64f
         rocket!!.height = 64f
 
         // create the raindrops array and spawn the first raindrop
-        rainAsteroids = Array()
-        spawnRainAsteroids()
+        asteroids = Array(MathUtils.random(3 , 6))
+        spawnAsteroids()
     }
 
-    private fun spawnRainAsteroids() {
-        val raindrop = Rectangle()
-        raindrop.x = MathUtils.random(0, 800 - 64).toFloat()
-        raindrop.y = 480f
-        raindrop.width = 64f
-        raindrop.height = 64f
-        rainAsteroids!!.add(raindrop)
-        lastAsteroidTime = TimeUtils.nanoTime()
+    private fun spawnAsteroids() {
+        val hitBoxAsteroids = Circle()
+        val iter = asteroids!!.iterator()
+        while (iter.hasNext()) {
+            if(hitBoxAsteroids.overlaps(hitBoxAsteroids)){
+                continue
+            }else{
+                hitBoxAsteroids.x = MathUtils.random(0, 800 - 64).toFloat()
+                hitBoxAsteroids.y = MathUtils.random(0, 480 - 64).toFloat()
+                hitBoxAsteroids.radius = 64f
+            }
+        }
     }
 
+    private fun collisionRockets(){
+
+    }
     override fun render() {
         // clear the screen with a dark blue color. The
         // arguments to clear are the red, green
@@ -94,17 +101,16 @@ class AvionesController : ApplicationAdapter() {
         sprite!!.draw(batch)
         batch!!.draw(spaceImage, 0f, 0f)
         batch!!.draw(asteroidImage, rocket!!.x, rocket!!.y)
-        for (raindrop in rainAsteroids!!) {
-            batch!!.draw(rocketImage, raindrop.x, raindrop.y)
-        }
         batch!!.end()
+
 
         // process user input
         if (Gdx.input.isTouched) {
             val touchPos = Vector3()
             touchPos[Gdx.input.x.toFloat(), Gdx.input.y.toFloat()] = 0f
             camera!!.unproject(touchPos)
-            rocket!!.x = touchPos.x - 64 / 2
+            rocket!!.x = touchPos.x -64 /2
+            rocket!!.y = rocket!!.y + 64 / 2 * Gdx.graphics.deltaTime
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) rocket!!.x -= 200 * Gdx.graphics.deltaTime
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) rocket!!.x += 200 * Gdx.graphics.deltaTime
@@ -112,23 +118,24 @@ class AvionesController : ApplicationAdapter() {
         // make sure the bucket stays within the screen bounds
         if (rocket!!.x < 0) rocket!!.x = 0f
         if (rocket!!.x > 800 - 64) rocket!!.x = (800 - 64).toFloat()
+        if (rocket!!.y < 0) rocket!!.y = 0f
+        if (rocket!!.y > 480 - 64) rocket!!.y = (480 - 64).toFloat()
 
         // check if we need to create a new raindrop
-        if (TimeUtils.nanoTime() - lastAsteroidTime > 1000000000) spawnRainAsteroids()
 
         // move the raindrops, remove any that are beneath the bottom edge of
         // the screen or that hit the bucket. In the latter case we play back
         // a sound effect as well.
-        val iter = rainAsteroids!!.iterator()
-        while (iter.hasNext()) {
-            val raindrop = iter.next()
-            raindrop.y -= 200 * Gdx.graphics.deltaTime
-            if (raindrop.y + 64 < 0) iter.remove()
-            if (raindrop.overlaps(rocket)) {
+        //val iter = rainAsteroids!!.iterator()
+        //while (iter.hasNext()) {
+       //     val raindrop = iter.next()
+       //     raindrop.y -= 200 * Gdx.graphics.deltaTime
+       //     if (raindrop.y + 64 < 0) iter.remove()
+       //     if (raindrop.overlaps(rocket)) {
                 //dropSound.play();
-                iter.remove()
-            }
-        }
+        //        iter.remove()
+       //     }
+        //}
     }
 
     override fun dispose() {
@@ -143,6 +150,7 @@ class AvionesController : ApplicationAdapter() {
     }
 
     companion object {
-        var backgroundSprite: Sprite? = null
+
     }
 }
+
