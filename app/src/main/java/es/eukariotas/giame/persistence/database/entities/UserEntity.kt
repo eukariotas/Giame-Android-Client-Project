@@ -1,11 +1,11 @@
 package es.eukariotas.giame.persistence.database.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
+import androidx.room.*
+
 
 @Entity(tableName = "user")
 data class UserEntity(
-    @ColumnInfo(name = "id") val id: Int,
+    @PrimaryKey() val id: Int,
     @ColumnInfo(name = "user") val name: String,
     @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "email") val email: String,
@@ -13,6 +13,7 @@ data class UserEntity(
     @ColumnInfo(name = "Country") val country: String,
     @ColumnInfo(name = "description") val city: String,
     @ColumnInfo(name = "last_login") val lastLogin: String,
+
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
