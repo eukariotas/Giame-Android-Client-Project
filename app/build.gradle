@@ -84,11 +84,15 @@ dependencies {
     implementation "com.squareup.picasso:picasso:2.71828"
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     //Room
     implementation "androidx.room:room-ktx:2.5.0"
-    kapt "androidx.room:room-compiler:2.4.0"
+    kapt "androidx.room:room-compiler:2.5.0"
+
+    //dagger hilt
+    implementation "com.google.dagger:hilt-android:2.35"
+    kapt "com.google.dagger:hilt-android-compiler:2.35"
 }
 task copyAndroidNatives() {
     file("libs/armeabi/").mkdirs()
