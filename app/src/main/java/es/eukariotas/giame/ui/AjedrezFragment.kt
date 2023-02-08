@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import com.badlogic.gdx.backends.android.AndroidGraphics
+import com.google.android.material.snackbar.Snackbar
 import es.eukariotas.giame.R
 import es.eukariotas.giame.game.ajedrez.AjedrezController
 import es.eukariotas.giame.game.ajedrez.AjedrezLauncher
@@ -25,7 +26,15 @@ class AjedrezFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         ajedrezController = AjedrezController()
         var config = AndroidApplicationConfiguration()
-        return ajedrezLauncher.initializeForView(ajedrezController, config)
+        config.useAccelerometer = false
+        config.useCompass = false
+        config.useImmersiveMode = true
+        val view = inflater.inflate(R.layout.fragment_ajedrez, container, false)
+        return view
+    }
+    companion object{
+        fun showSnackbar(text: String){
+                    }
     }
 
 
