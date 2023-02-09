@@ -14,9 +14,11 @@
     <string name="password">password</string>
     <string name="user_name">User Name</string>
     <string name="login">login</string>
-    <string name="singIn" />
-    <string name="sing">sing in</string>
-    <string name="enRaya">3 en ralla</string>
+    <string name="sign">Sign in</string>
+    <string name="enRaya">Tic Tac Toe</string>
     <string name="Ajedrez">Ajedrez</string>
-    <string name="Avioncitos" >Avioncitos</string>
+    <string name="Avioncitos">Avioncitos</string>
+    <string name="Sp">Single Player</string>
+    <string name="Mp">Multi Player</string>
+    <string name="title_activity_hay_que_laburar">hayQueLaburar</string>
 </resources>

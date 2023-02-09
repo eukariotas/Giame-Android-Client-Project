@@ -4,5 +4,4 @@ import com.badlogic.gdx.ApplicationAdapter
 
 class AjedrezController: ApplicationAdapter() {
 
-
 }
