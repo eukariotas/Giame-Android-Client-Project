@@ -5,14 +5,34 @@ import es.eukariotas.giame.persistence.data.apiclient.UserApiClient
 import es.eukariotas.giame.persistence.data.model.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class UserService {
+class UserService @Inject constructor() {
     private val retrofit = RetrofitHelper.getRetrofit()
 
     suspend fun getUser(name: String, password: String): UserModel {
         return withContext(Dispatchers.IO){
             val response = retrofit.create(UserApiClient::class.java).getUser(name, password)
-            response.body()?: UserModel(0, "", "", "", "", "", "", "", "")
+            response.body()?: UserModel(0, "invitado", "invitado", "", "", "", "", "", "")
+        }
+    }
+
+    suspend fun login(name:String, password:String): UserModel {
+        return withContext(Dispatchers.IO){
+            val response = retrofit.create(UserApiClient::class.java).login(name, password)
+            if (response != null) {
+                UserModel(response.body()!!.id,
+                    response.body()!!.password,
+                    response.body()!!.password,
+                    response.body()!!.email,
+                    response.body()!!.image,
+                    response.body()!!.country,
+                    response.body()!!.description,
+                    response.body()!!.lastLogin,
+                    response.headers().get("token").toString())            } else {
+                UserModel(0, "invitado", "invitado", "", "", "", "", "", "")
+            }
+
         }
     }
 

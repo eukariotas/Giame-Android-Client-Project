@@ -2,11 +2,14 @@ package es.eukariotas.giame.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import es.eukariotas.giame.R
 import es.eukariotas.giame.databinding.FragmentFirstBinding
 import es.eukariotas.giame.game.Aviones.AvionesLauncher
 import es.eukariotas.giame.game.ajedrez.AjedrezLauncher
@@ -41,6 +44,9 @@ class FirstFragment : Fragment() {
         binding.btAjedrez.setOnClickListener {
             val intent = Intent( activity, AjedrezLauncher::class.java)
             startActivity(intent)
+        }
+        binding.btToLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_LoginFragment)
         }
 
     }
