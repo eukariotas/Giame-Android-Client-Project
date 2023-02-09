@@ -1,12 +1,14 @@
-package es.eukariotas.giame.game.ajedrez
+package es.eukariotas.giame.game.Aviones
 
 import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 
-public class AjedrezLauncher: AndroidApplication() {
+class AvionesLauncher: AndroidApplication() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         var config = AndroidApplicationConfiguration()
-        initialize(AjedrezController(), config)
+        config.useAccelerometer = false
+        config.useCompass = false
+        return initialize(AvionesController(), config)
     }
 }
