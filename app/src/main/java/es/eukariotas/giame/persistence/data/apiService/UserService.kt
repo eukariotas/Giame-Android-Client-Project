@@ -13,25 +13,14 @@ class UserService @Inject constructor() {
     suspend fun getUser(name: String, password: String): UserModel {
         return withContext(Dispatchers.IO){
             val response = retrofit.create(UserApiClient::class.java).getUser(name, password)
-            response.body()?: UserModel(0, "invitado", "invitado", "", "", "", "", "", "")
+            response.body()?: UserModel(0, "invitado", "invitado", "", "", "", "", "")
         }
     }
 
     suspend fun login(name:String, password:String): UserModel {
         return withContext(Dispatchers.IO){
             val response = retrofit.create(UserApiClient::class.java).login(name, password)
-            if (response != null) {
-                UserModel(response.body()!!.id,
-                    response.body()!!.password,
-                    response.body()!!.password,
-                    response.body()!!.email,
-                    response.body()!!.image,
-                    response.body()!!.country,
-                    response.body()!!.description,
-                    response.body()!!.lastLogin,
-                    response.headers().get("token").toString())            } else {
-                UserModel(0, "invitado", "invitado", "", "", "", "", "", "")
-            }
+            response.body()?: UserModel(0, "invitado", "invitado", "", "", "", "", "")
 
         }
     }

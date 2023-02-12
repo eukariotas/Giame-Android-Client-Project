@@ -14,13 +14,15 @@ class UserViewModel @Inject constructor(
     private val userUseCase: UserUseCase,
     private val context: Context
 ): ViewModel() {
-    val userModel = MutableLiveData<UserModel?>()
+    lateinit var userActivo:UserModel
     fun onCreate(user : String, password: String) = viewModelScope.launch {
         viewModelScope.launch {
             val result = userUseCase(user, password, context)
             if (result != null) {
                 println("result: ${result}")
-                userModel.postValue(result)
+                println("usuario: ${result.user} logeado")
+                //TODO hacer que se guarde en la base de datos pero en el liveData
+                userActivo =result
             } else {
                 println("Usuario no encontrado")
             }
