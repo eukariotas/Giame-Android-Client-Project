@@ -4,26 +4,33 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.scopes.ViewModelScoped
+import es.eukariotas.giame.core.RetrofitHelper
+import es.eukariotas.giame.persistence.data.apiclient.UserApiClient
 import es.eukariotas.giame.persistence.data.domain.UserUseCase
 import es.eukariotas.giame.persistence.data.model.UserModel
+import es.eukariotas.giame.persistence.database.entities.UserEntity
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
 import javax.inject.Inject
 
-class UserViewModel @Inject constructor(
-    private val userUseCase: UserUseCase,
-    private val context: Context
-): ViewModel() {
-    val userModel = MutableLiveData<UserModel?>()
-    fun onCreate(user : String, password: String) = viewModelScope.launch {
-        viewModelScope.launch {
-            val result = userUseCase(user, password, context)
-            if (result != null) {
-                println("result: ${result}")
-                userModel.postValue(result)
-            } else {
-                println("Usuario no encontrado")
+class UserViewModel (): ViewModel() {
+    val userModel = MutableLiveData<UserModel>()
+    val token = MutableLiveData<String>()
+
+
+    fun login(user: String, password:String) = viewModelScope.launch {
+        val call = RetrofitHelper.getRetrofit().create(UserApiClient::class.java).login(user, password)
+        if (call.isSuccessful){
+            val response = call.body()//este es el usuario
+            val header = call.headers()//este es el token
+            if (response?.user != null&& response?.id != null&& response?.email != null &&response?.password != null){
+                userModel.value = response!!
+                token.value = header.get("token")
+            }else {
+                throw Exception("Error al loguear")
             }
+
         }
     }
+
 }

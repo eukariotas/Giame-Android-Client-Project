@@ -36,13 +36,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btAjedrez" />
 
-    <Button
+    <TextView
+        android:id="@+id/tvFraseTopFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/noLogueado"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btToLogin"
+        app:layout_constraintEnd_toStartOf="@+id/btToLogin" />
+
+    <TextView
         android:id="@+id/btToLogin"
-        android:layout_width="75dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/login"
+        style="@style/Widget.AppCompat.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/Logueate"
+        android:textColor="#9C27B0"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,10 +23,13 @@
         <action
             android:id="@+id/action_FirstFragment_to_AjedrezFragment"
             app:destination="@id/AjedrezFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_ConfigFragment"
+            app:destination="@id/ConfigFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="es.eukariotas.giame.ui.SecondFragment"
+        android:name="es.eukariotas.giame.ui.GameFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
@@ -40,6 +43,15 @@
         android:label="@string/game_fragment_label"
         tools:layout="@layout/fragment_game" >
 
+    </fragment>
+    <fragment
+        android:id="@+id/ConfigFragment"
+        android:name="es.eukariotas.giame.ui.ConfigurationFragment"
+        android:label="@string/configuracion"
+        tools:layout="@layout/fragment_configuration" >
+        <action
+            android:id="@+id/action_ConfigFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
     </fragment>
     <fragment android:id="@+id/LoginFragment"
         android:name="es.eukariotas.giame.ui.LoginFragment"
