@@ -8,32 +8,19 @@ import es.eukariotas.giame.persistence.data.model.UserModel
 import es.eukariotas.giame.persistence.database.UserDatabase
 import es.eukariotas.giame.persistence.database.dao.UserDao
 import es.eukariotas.giame.persistence.database.entities.UserEntity
+import javax.inject.Inject
 
-class UserRepository {
-    private val api = UserService()
-    private lateinit var application: Application
-    private lateinit var db :UserDatabase
+class UserRepository @Inject constructor(
+         private val api:UserService,
+         private val userDao: UserDao
+) {
 
-
-    operator fun invoke(context: Context){
-        this.application= context.applicationContext as Application
-        db = UserDatabase.getInstance(application)
+    suspend fun login(name: String, password: String):UserEntity{
+        return api.login(name, password)
 
     }
 
-    suspend fun getUser(name: String, password: String, context: Context):UserModel{
-        this.invoke(context)
-        val repose = api.getUser(name, password)
-        //TODO hacer que se guarde en la base de datos pero en el liveData
-        //db.userDao().insertUser(repose.id, repose.user, repose.password, repose.email, repose.image, repose.country, repose.description, repose.lastLogin, repose.token)
-        return repose
-    }
-
-    suspend fun login(name: String, password: String, context: Context):UserModel{
-        this.invoke(context)
-        val repose = api.login(name, password)
-        //TODO hacer que se guarde en la base de datos pero en el liveData
-        //db.userDao().insertUser(repose.id, repose.user, repose.password, repose.email, repose.image, repose.country, repose.description, repose.lastLogin, repose.token)
-        return repose
+    suspend fun insertUser(repose: UserEntity){
+        userDao.insertUser(repose.id, repose.name, repose.password, repose.email, repose.avatar?:"null", repose.country?:"null", repose.description?:"null", repose.lastLogin, repose.token)
     }
 }

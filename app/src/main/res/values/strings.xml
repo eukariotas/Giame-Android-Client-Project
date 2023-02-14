@@ -23,5 +23,12 @@
     <string name="noLogueado2">Aun no te has logueado?</string>
     <string name="about">about</string>
     <string name="Deslogueate">Logout</string>
+    <string name="logueado">Estas logueado como:</string>
+    <string name="ip">ip</string>
+    <string name="Ip_servidor">Ip del servidor</string>
+    <string name="puerto">Puerto:</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="configuracion">Configuracion</string>
 
 </resources>

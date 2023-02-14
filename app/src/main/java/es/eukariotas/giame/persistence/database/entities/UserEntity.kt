@@ -9,9 +9,9 @@ data class UserEntity(
     @ColumnInfo(name = "user") val name: String,
     @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "email") val email: String,
-    @ColumnInfo(name = "image") val avatar: String,
-    @ColumnInfo(name = "Country") val country: String,
-    @ColumnInfo(name = "description") val city: String,
+    @ColumnInfo(name = "image") val avatar: String?,
+    @ColumnInfo(name = "Country") val country: String?,
+    @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "last_login") val lastLogin: String,
     @ColumnInfo(name = "token") val token: String
 ){
@@ -35,10 +35,11 @@ data class UserEntity(
         result = 31 * result + email.hashCode()
         result = 31 * result + avatar.hashCode()
         result = 31 * result + country.hashCode()
-        result = 31 * result + city.hashCode()
+        result = 31 * result + description.hashCode()
         result = 31 * result + lastLogin.hashCode()
         result = 31 * result + token.hashCode()
         return result
     }
+
 
 }
