@@ -30,7 +30,7 @@ class Rocket {
         bodyDef.position.y = 10f
 
 
-        rocketShape = PolygonShape(imageRocket!!.width / 2, imageRocket!!.height / 2)
+        rocketShape = null//PolygonShape(imageRocket!!.width / 2, imageRocket!!.height / 2)
         val fixtureDef = FixtureDef()
         fixtureDef.shape = rocketShape
         fixtureDef.density = 1f
