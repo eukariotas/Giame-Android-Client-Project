@@ -14,6 +14,7 @@ import es.eukariotas.giame.R
 import es.eukariotas.giame.databinding.FragmentFirstBinding
 import es.eukariotas.giame.game.Aviones.AvionesLauncher
 import es.eukariotas.giame.game.ajedrez.AjedrezLauncher
+import es.eukariotas.giame.game.tresEnRaya.TicTacToeLauncher
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
