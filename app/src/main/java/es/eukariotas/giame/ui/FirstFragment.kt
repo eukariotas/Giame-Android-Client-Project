@@ -45,6 +45,10 @@ class FirstFragment : Fragment() {
             val intent = Intent( activity, AjedrezLauncher::class.java)
             startActivity(intent)
         }
+        binding.bt3enRaya.setOnClickListener {
+            val intent = Intent( activity, TicTacToeLauncher::class.java)
+            startActivity(intent)
+        }
         binding.btToLogin.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_LoginFragment)
         }
