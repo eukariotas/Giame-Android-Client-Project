@@ -9,8 +9,7 @@ import es.eukariotas.giame.persistence.database.entities.UserEntity
 
 @Database(entities = [UserEntity::class], version = 1)
 abstract class UserDatabase: RoomDatabase(){
-    abstract fun userDao(): UserDao
-
+    abstract fun getUserDao(): UserDao
     companion object{
         private var INSTANCE: UserDatabase? = null
 

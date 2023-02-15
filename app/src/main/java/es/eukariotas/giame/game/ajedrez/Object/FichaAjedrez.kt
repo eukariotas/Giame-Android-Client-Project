@@ -1,9 +1,13 @@
 package es.eukariotas.giame.game.ajedrez.Object
 
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Sprite
+
 data class FichaAjedrez(
     val color: String,
     val tipo: String,
-) {
+):Sprite() {
+
     companion object{
         val letras = listOf("a","b","c","d","e","f","g","h")
     }
@@ -171,4 +175,6 @@ data class FichaAjedrez(
 
         return posibles
     }
+
+
 }
