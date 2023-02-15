@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import es.eukariotas.giame.game.ajedrez.Object.CasilaAjedrez
 import es.eukariotas.giame.game.ajedrez.Object.FichaAjedrez
 
@@ -61,7 +62,19 @@ class AjedrezController: ApplicationAdapter() {
         getTableroNuevo(tamañoCelda)
         Gdx.input.inputProcessor = object : InputAdapter(){
             var posiblesPosiciones:List<String> = ArrayList()
+            var fichaSeleccionada:FichaAjedrez? = null
+            var posicionFichaSeleccionada:String? = null
         override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            if (posiblesPosiciones != null){
+                for (posicion in posiblesPosiciones){
+                    changeCeldaColor("normal",posicion)
+                }
+            }
+            if (fichaSeleccionada!=null){
+                fichas.remove(posicionFichaSeleccionada)
+                fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
+                fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
+            }
             val x = Gdx.input.x
             val y = (Gdx.input.y-Gdx.graphics.height)*-1
             println("tocado en ${x} ${y}")
@@ -69,40 +82,45 @@ class AjedrezController: ApplicationAdapter() {
             for(sprite in spriteList){
                 if (sprite.boundingRectangle.contains(x.toFloat(),y.toFloat())){
                     ficha = true
-
-                    for (fichas in fichas){
-                        if (fichas.value.boundingRectangle.contains(x.toFloat(),y.toFloat())){
-                            var ficha = fichas.value
-                            var posicion = fichas.key
-                            posiblesPosiciones = comprobarCasillas(ficha,posicion)
-                            println("Ficha ${ficha.tipo} ${ficha.color}")
-                            for (posicion in posiblesPosiciones){
-                                changeCeldaColor("verde",posicion)
-                            }
+                    for (fichaa in fichas){
+                        if (fichaa.value.boundingRectangle.contains(x.toFloat(),y.toFloat())){
+                            fichaSeleccionada = fichaa.value
+                            posicionFichaSeleccionada = fichaa.key
 
                         }
                     }
                 }
             }
             if (!ficha){
-                println("Tocada una celda")
+                if(posiblesPosiciones != null){
+                    for (celda in tablero){
+                        if (celda.value.boundingRectangle.contains(x.toFloat(),y.toFloat())&&posiblesPosiciones.contains(celda.key)){
+                            fichas.remove(posicionFichaSeleccionada)
+                            fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
+                            fichaSeleccionada!!.setPosition(celda.value.x,celda.value.y)
+                            fichas.put(celda.key,fichaSeleccionada!!)
+                        }
+                    }
+                }
+            }else{
+                posiblesPosiciones = comprobarCasillas(fichaSeleccionada!!,posicionFichaSeleccionada!!)
+                for (posicion in posiblesPosiciones){
+                    changeCeldaColor("verde",posicion)
+                }
+                fichas.remove(posicionFichaSeleccionada)
+                fichaSeleccionada!!.setSize(tamañoCelda-10,tamañoCelda-10)
+                fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
             }
           return true
         }
 
         override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
             println("soltada")
-            for (posicion in posiblesPosiciones){
-                changeCeldaColor("normal",posicion)
-            }
             return true
         }
-
         }
-
-
-
     }
+
     companion object{
         var tamañoCelda = 0f
         var turno = 0
@@ -247,7 +265,6 @@ class AjedrezController: ApplicationAdapter() {
         fichaReinaNegraTexture.dispose()
         fichaReyBlancoTexture.dispose()
         fichaReyNegroTexture.dispose()
-
         batch!!.dispose()
     }
 
@@ -286,6 +303,15 @@ class AjedrezController: ApplicationAdapter() {
     }
     fun comprobarCasillas(ficha: FichaAjedrez, posicion: String): List<String>{
         val posiciones = ficha.getPosiblePosition(posicion)
+        val posicionesPosibles = mutableListOf<String>()
+        if (ficha.tipo == "caballo"){
+            for (posicion in posiciones){
+                if(isEmpy(posicion)){
+                    posicionesPosibles.add(posicion)
+                }
+        }
+            return posicionesPosibles
+        }
         var posicionesValidas = mutableListOf<String>()
         for (posicion in posiciones){
             if (!fichas.containsKey(posicion)){
@@ -293,6 +319,60 @@ class AjedrezController: ApplicationAdapter() {
                     }
                 }
 
+
+        return comprobarVectores(posicionesValidas, posicion)
+    }
+    fun comprobarVectores(posiciones: List<String>, posicion: String):List<String>{
+        var posicionesValidas = mutableListOf<String>()
+        var columna = mutableListOf<String>()
+        var fila = mutableListOf<String>()
+        var diagonalIzq = mutableListOf<String>()
+        var diagonalDer = mutableListOf<String>()
+
+        //creamos la columma
+        for (p in posiciones){
+            if (p.split("-")[0] == posicion.split("-")[0]){
+                columna.add(p)
+            }
+        }
+        //verificamos la continuacion de la columna
+        columna.sort()
+        var columnaA = mutableListOf<String>()
+        var columnaB = mutableListOf<String>()
+        for (p in columna){
+            if (p.split("-")[1].toInt() < posicion.split("-")[1].toInt()){
+                columnaA.add(p)
+            }else{
+                columnaB.add(p)
+            }
+        }
+        columnaA.sort()
+        var index = posicion.split("-")[1].toInt()
+        for (p in columnaA){
+            if (p.split("-")[1].toInt() == index - 1){
+                posicionesValidas.add(p)
+                index = p.split("-")[1].toInt()
+            }
+        }
+        columnaB.sort()
+        index = posicion.split("-")[1].toInt()
+        for (p in columnaB){
+            if (p.split("-")[1].toInt() == index + 1){
+                posicionesValidas.add(p)
+                index = p.split("-")[1].toInt()
+            }
+        }
+
+
+        //creamos la fila
+        for (p in posiciones){
+            if (p.split("-")[1] == posicion.split("-")[1]){
+                fila.add(p)
+            }
+        }
+        //creamos la diagonal izquierda
+        //creamos la diagonal derecha
+        //TODO falta crear las diagonales
         return posicionesValidas
     }
     fun getFicha(posicion: String): FichaAjedrez {
@@ -406,7 +486,7 @@ class AjedrezController: ApplicationAdapter() {
             casilla!!.draw(batch)
            }
         for (ficha in fichas.values) {
-            pintarFicha(ficha,ficha.x,ficha.y,tamañoCelda)
+            pintarFicha(ficha,ficha.x,ficha.y,ficha.width)
         }
 
 
@@ -438,16 +518,10 @@ class AjedrezController: ApplicationAdapter() {
      * Detecta si la casilla de destino esta ocupada
      */
     fun isEmpy(posicion:String):Boolean{
-        for (i in fichas){
-            if (i.key==posicion){
-                if (i.value.tipo=="n/a"){
-                    return true
-                }else{
-                    return false
-                }
-            }
+        if (fichas.get(posicion)==null){
+            return true
         }
-        throw Exception("No existe esa posicion")
+        return false
     }
 
     /**
