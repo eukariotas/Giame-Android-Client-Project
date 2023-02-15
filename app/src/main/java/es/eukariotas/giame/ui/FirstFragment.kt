@@ -47,7 +47,9 @@ class FirstFragment : Fragment() {
         binding.btToLogin.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_LoginFragment)
         }
-
+        binding.bt3enRaya.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
 
     }
 

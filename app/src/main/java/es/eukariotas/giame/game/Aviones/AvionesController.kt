@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.ScreenUtils
 class AvionesController : ApplicationAdapter() {
     private val world = World(Vector2(0f, 0f), false)
     private var camera = OrthographicCamera()
-    private val b2dr = Box2DDebugRenderer()
-    private var rBody: Body? = null
+    //private val b2dr = Box2DDebugRenderer()
+    private lateinit var rBody: Body
     private var batch: SpriteBatch? = null
 
 
@@ -26,7 +26,7 @@ class AvionesController : ApplicationAdapter() {
         val h = Gdx.graphics.height.toFloat()
         camera.setToOrtho(false, w / 2, h / 2)
 
-
+        rBody = Rocket().getBodyDef()!!.let { world.createBody(it) }
         rBody!!.createFixture(Rocket().getRocketShpae(), 1f)
         rBody = world.createBody(Rocket().getBodyDef())
 
@@ -73,7 +73,7 @@ class AvionesController : ApplicationAdapter() {
     override fun dispose() {
         // dispose of all the native resources
         world.dispose()
-        b2dr.dispose()
+        //b2dr.dispose()
 
     }
 

@@ -18,9 +18,6 @@
             android:id="@+id/action_FirstFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
         <action
-            android:id="@+id/startGame"
-            app:destination="@id/GameFragment" />
-        <action
             android:id="@+id/action_FirstFragment_to_AjedrezFragment"
             app:destination="@id/AjedrezFragment" />
         <action
@@ -36,13 +33,6 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/GameFragment"
-        android:name="es.eukariotas.giame.ui.GameFragment"
-        android:label="@string/game_fragment_label"
-        tools:layout="@layout/fragment_game" >
-
     </fragment>
     <fragment
         android:id="@+id/ConfigFragment"

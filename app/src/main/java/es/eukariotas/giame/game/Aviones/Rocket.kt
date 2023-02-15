@@ -10,27 +10,23 @@ import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
 
-class Rocket {
-    private var rocketShape: PolygonShape? = null
-    private var bodyDef: BodyDef? = null
+class Rocket:PolygonShape {
+
+    private var bodyDef = BodyDef().apply {
+        type = BodyDef.BodyType.DynamicBody
+        position.set(5f, 10f)
+    }
 
 
-    private var imageRocket: Texture? = null
+    private var imageRocket = Texture(Gdx.files.internal("avion.png"))
     private var rocketBox: Rectangle? = null
     private var posRocket: Vector2? = null
+    private var rocketShape = PolygonShape().apply {
+        setAsBox((imageRocket!!.width / 2).toFloat(), (imageRocket!!.height / 2).toFloat())
+    }
 
 
     constructor(){
-        imageRocket = Texture(Gdx.files.internal("avion.png"))
-
-
-        var bodyDef = BodyDef()
-        bodyDef.type = BodyDef.BodyType.DynamicBody
-        bodyDef.position.x = 5f
-        bodyDef.position.y = 10f
-
-
-        rocketShape = null//PolygonShape(imageRocket!!.width / 2, imageRocket!!.height / 2)
         val fixtureDef = FixtureDef()
         fixtureDef.shape = rocketShape
         fixtureDef.density = 1f
