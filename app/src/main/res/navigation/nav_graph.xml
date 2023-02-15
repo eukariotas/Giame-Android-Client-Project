@@ -14,15 +14,59 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/startGame"
+            app:destination="@id/GameFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_AjedrezFragment"
+            app:destination="@id/AjedrezFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_ConfigFragment"
+            app:destination="@id/ConfigFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="es.eukariotas.giame.ui.SecondFragment"
+        android:name="es.eukariotas.giame.ui.GameFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/GameFragment"
+        android:name="es.eukariotas.giame.ui.GameFragment"
+        android:label="@string/game_fragment_label"
+        tools:layout="@layout/fragment_game" >
+
+    </fragment>
+    <fragment
+        android:id="@+id/ConfigFragment"
+        android:name="es.eukariotas.giame.ui.ConfigurationFragment"
+        android:label="@string/configuracion"
+        tools:layout="@layout/fragment_configuration" >
+        <action
+            android:id="@+id/action_ConfigFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment android:id="@+id/LoginFragment"
+        android:name="es.eukariotas.giame.ui.LoginFragment"
+        android:label="@string/login"
+        tools:layout="@layout/fragment_login" >
+
+        <action
+            android:id="@+id/action_LoginFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/AjedrezFragment"
+        android:name="es.eukariotas.giame.ui.AjedrezFragment"
+        android:label="@string/Ajedrez"
+        tools:layout="@layout/fragment_ajedrez">
     </fragment>
 </navigation>
