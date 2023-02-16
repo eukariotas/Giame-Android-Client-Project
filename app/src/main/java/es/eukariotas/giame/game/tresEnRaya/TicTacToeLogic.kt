@@ -15,7 +15,7 @@ import es.eukariotas.giame.databinding.FragmentSecondBinding
 import kotlin.system.exitProcess
 
 
-class SecondFragment: Fragment(){
+class TicTacToeLogic: Fragment(){
 
     var playerTurn = true
     var player1Count = 0
