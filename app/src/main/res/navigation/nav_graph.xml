@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="es.eukariotas.giame.TicTacToeLogic"
+        android:name="es.eukariotas.giame.game.tresEnRaya.TicTacToeLogic"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
