@@ -11,19 +11,19 @@
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-        <action
-            android:id="@+id/action_FirstFragment_to_AjedrezFragment"
-            app:destination="@id/AjedrezFragment" />
         <argument
             android:name="User"
             app:argType="es.eukariotas.giame.persistence.data.model.UserModel" />
+        <action
+            android:id="@+id/action_FirstFragment_to_ConexionFragment"
+            app:destination="@id/ConexionFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="es.eukariotas.giame.ui.GameFragment"
+        android:name="es.eukariotas.giame.TicTacToeLogic"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
@@ -87,5 +87,17 @@
         android:name="es.eukariotas.giame.InfoFragment"
         android:label="@string/info"
         tools:layout="@layout/fragment_info" />
+    <fragment
+        android:id="@+id/ConexionFragment"
+        android:name="es.eukariotas.giame.ConexionFragment"
+        android:label="@string/conexion"
+        tools:layout="@layout/fragment_conexion" >
+        <action
+            android:id="@+id/action_ConexionFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_ConexionFragment_to_AjedrezFragment"
+            app:destination="@id/AjedrezFragment" />
+    </fragment>
 
 </navigation>

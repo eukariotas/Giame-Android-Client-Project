@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import es.eukariotas.giame.ConexionFragment
 import es.eukariotas.giame.R
 import es.eukariotas.giame.databinding.FragmentFirstBinding
 import es.eukariotas.giame.game.Aviones.AvionesLauncher
@@ -39,19 +40,18 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btAvioncitos.setOnClickListener{
-            startActivity(Intent(activity, AvionesLauncher::class.java))
+            ConexionFragment.juego = "aviones"
+            findNavController().navigate(R.id.action_FirstFragment_to_ConexionFragment)
         }
         binding.btAjedrez.setOnClickListener {
-            val intent = Intent( activity, AjedrezLauncher::class.java)
-            startActivity(intent)
+            ConexionFragment.juego = "ajedrez"
+            findNavController().navigate(R.id.action_FirstFragment_to_ConexionFragment)
         }
         binding.bt3enRaya.setOnClickListener {
             val intent = Intent( activity, TicTacToeLauncher::class.java)
             startActivity(intent)
         }
-        /*binding.btToLogin.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_LoginFragment)
-        }*/
+
         binding.bt3enRaya.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
