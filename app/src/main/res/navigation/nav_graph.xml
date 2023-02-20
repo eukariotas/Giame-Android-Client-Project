@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/MenuFragment">
 
     <fragment
         android:id="@+id/FirstFragment"
@@ -15,14 +15,11 @@
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
         <action
-            android:id="@+id/action_FirstFragment_to_LoginFragment"
-            app:destination="@id/LoginFragment" />
-        <action
             android:id="@+id/action_FirstFragment_to_AjedrezFragment"
             app:destination="@id/AjedrezFragment" />
-        <action
-            android:id="@+id/action_FirstFragment_to_ConfigFragment"
-            app:destination="@id/ConfigFragment" />
+        <argument
+            android:name="User"
+            app:argType="es.eukariotas.giame.persistence.data.model.UserModel" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -40,8 +37,8 @@
         android:label="@string/configuracion"
         tools:layout="@layout/fragment_configuration" >
         <action
-            android:id="@+id/action_ConfigFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_ConfigFragment_to_MenuFragment"
+            app:destination="@id/MenuFragment" />
     </fragment>
     <fragment android:id="@+id/LoginFragment"
         android:name="es.eukariotas.giame.ui.LoginFragment"
@@ -59,4 +56,36 @@
         android:label="@string/Ajedrez"
         tools:layout="@layout/fragment_ajedrez">
     </fragment>
+    <fragment
+        android:id="@+id/MenuFragment"
+        android:name="es.eukariotas.giame.MenuFragment"
+        android:label="@string/menu"
+        tools:layout="@layout/fragment_menu">
+        <action
+            android:id="@+id/action_MenuFragment_to_InfoFragment"
+            app:destination="@id/InfoFragment" />
+        <action
+            android:id="@+id/action_MenuFragment_to_AboutFragment"
+            app:destination="@id/AboutFragment" />
+        <action
+            android:id="@+id/action_MenuFragment_to_ConfigFragment"
+            app:destination="@id/ConfigFragment" />
+        <action
+            android:id="@+id/action_MenuFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_MenuFragment_to_FirstFragment2"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/AboutFragment"
+        android:name="es.eukariotas.giame.AboutFragment"
+        android:label="@string/about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/InfoFragment"
+        android:name="es.eukariotas.giame.InfoFragment"
+        android:label="@string/info"
+        tools:layout="@layout/fragment_info" />
+
 </navigation>

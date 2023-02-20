@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -31,10 +30,31 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.action_settings -> {
-                    navController.navigate(R.id.action_FirstFragment_to_ConfigFragment)
+                    navController.navigate(R.id.action_MenuFragment_to_ConfigFragment)
+                    true
+                }
+                R.id.action_about -> {
+                    navController.navigate(R.id.action_MenuFragment_to_AboutFragment)
+                    true
+                }
+                R.id.action_info -> {
+                    navController.navigate(R.id.action_MenuFragment_to_InfoFragment)
                     true
                 }
                 else -> false
+            }
+        }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.MenuFragment -> {
+                    // Aplicar el tema por defecto de la actividad (con barra de herramientas)
+                    setTheme(R.style.Theme_Giame)
+                    // Mostrar la barra de herramientas
+                    supportActionBar?.show()
+                }else ->{
+                    setTheme(R.style.NoActionBarTheme)
+                    supportActionBar?.hide()
+                }
             }
         }
     }
