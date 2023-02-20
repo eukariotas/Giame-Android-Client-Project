@@ -49,10 +49,12 @@ class FirstFragment : Fragment() {
             val intent = Intent( activity, TicTacToeLauncher::class.java)
             startActivity(intent)
         }
-        binding.btToLogin.setOnClickListener {
+        /*binding.btToLogin.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_LoginFragment)
+        }*/
+        binding.bt3enRaya.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
-
 
     }
 

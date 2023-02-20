@@ -34,12 +34,12 @@ class ConfigurationFragment : Fragment() {
         binding.btGuardar.setOnClickListener {
             serverIp = binding.etIpServer.text.toString()
             serverPort = binding.etPuerto.text.toString()
-            findNavController().navigate(R.id.action_ConfigFragment_to_FirstFragment)
+            findNavController().navigate(R.id.action_ConfigFragment_to_MenuFragment)
             Toast.makeText(context, "Configuración guardada", Toast.LENGTH_SHORT).show()
             //volver a inicio
         }
         binding.btCancelar.setOnClickListener {
-            findNavController().navigate(R.id.action_ConfigFragment_to_FirstFragment)
+            requireActivity().onBackPressed();
         }
     }
 

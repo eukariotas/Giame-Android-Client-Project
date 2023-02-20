@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
             if(call.isSuccessful){
                 if (response?.user != null&& response?.id != null&& response?.email != null &&response?.password != null){
                     Snackbar.make(binding.root, "Usuario: ${response!!.user} logueado correctamente", Snackbar.LENGTH_LONG).show()
-                    val action = LoginFragmentDirections.actionLoginFragmentToFirstFragment()
+                    //val action = LoginFragmentDirections.actionLoginFragmentToFirstFragment(null)
                     //findNavController().navigate(action)
                 }else {
                     Snackbar.make(binding.root, "Error al loguear", Snackbar.LENGTH_LONG).show()
