@@ -43,7 +43,14 @@
     <string name="JuegosDisponible_text">En esta aplicación se pueden jugar los siguientes juegos:</string>
     <string name="TicTacToe">Tic Tac Toe</string>
     <string name="TicTacToe_text">Juego de dos jugadores, que se juega en un tablero de tres filas por tres columnas. Los jugadores alternan en colocar una ficha en una casilla vacía del tablero. El objetivo del juego es conseguir colocar tres fichas en línea recta, ya sea horizontal, vertical o diagonal. El jugador que consiga colocar tres fichas en línea gana la partida.</string>
-    <string name="Ajedrez_text">Juego de ajedrez</string>
+    <string name="Ajedrez_text">Juego de ajedrez en el que se enfrentan dos jugadores, uno con las piezas blancas y otro con las negras. El objetivo del juego es capturar al rey del oponente mediante el movimiento de las piezas. El rey es la pieza más valiosa del juego, ya que si es capturado el jugador pierde la partida. Las piezas se mueven siguiendo unas reglas muy concretas, que se explican en el apartado de reglas.</string>
     <string name="Avioncitos_text">Pfff que escriba esto Ramon</string>
+    <string name="online">Online</string>
+    <string name="Local">Local</string>
+    <string name="Solitario">Solitario</string>
+    <string name="CrearPartida">Crear Partida</string>
+    <string name="BuscarPartida">Buscar Partida</string>
+    <string name="conexion">Conexion</string>
+    <string name="acercade_header">Acerca de la aplicacion</string>
 
 </resources>
