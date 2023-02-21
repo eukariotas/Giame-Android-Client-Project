@@ -8,11 +8,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
 import es.eukariotas.giame.game.ajedrez.Object.CasilaAjedrez
 import es.eukariotas.giame.game.ajedrez.Object.FichaAjedrez
 
 class AjedrezController: ApplicationAdapter() {
+    //las distintas texturas que se van a usar
+    lateinit var texturaLadrillo: Texture
     lateinit var celdaNegraTexture:Texture
     lateinit var celdaBlancaTexture:Texture
     lateinit var fichaPeonBlancoTexture:Texture
@@ -29,17 +32,21 @@ class AjedrezController: ApplicationAdapter() {
     lateinit var fichaReyNegroTexture:Texture
     lateinit var celdaVerdeBlanca:Texture
     lateinit var celdaVerdeNegra:Texture
+
     private var camera: OrthographicCamera? = null
     lateinit var batch:SpriteBatch
 
 
 
     /**
-     * Función que pintará el tablero de ajedrez
+     * Al iniciar se cargan las texturas
+     * y se realizan las configuraciones iniciales
      */
     @Override
     override fun create() {
-        tamañoCelda = Gdx.graphics.width.toFloat() / 8
+        tamañoCelda = Gdx.graphics.width.toFloat() / 8//se calcula el tamaño de las celdas
+        //texturas
+        texturaLadrillo = Texture(Gdx.files.internal("wallPrint.png"))
         celdaBlancaTexture = Texture(Gdx.files.internal("celdaBlanca.png"))
         celdaNegraTexture = Texture(Gdx.files.internal("celdaNegra.png"))
         fichaPeonBlancoTexture = Texture(Gdx.files.internal("peonBlanco.png"))
@@ -56,32 +63,51 @@ class AjedrezController: ApplicationAdapter() {
         fichaReyNegroTexture = Texture(Gdx.files.internal("reiNegro.png"))
         celdaVerdeBlanca = Texture(Gdx.files.internal("celdaVerdeBlanca.png"))
         celdaVerdeNegra = Texture(Gdx.files.internal("celdaVerdeNegra.png"))
+        //se crea la camara
         camera = OrthographicCamera()
         camera!!.setToOrtho(false, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         batch = SpriteBatch()
+        //se crea el tablero con las fichas
         getTableroNuevo(tamañoCelda)
+
+        //el input processor se encarga de los eventos de entrada
         Gdx.input.inputProcessor = object : InputAdapter(){
-            var posiblesPosiciones:List<String> = ArrayList()
-            var fichaSeleccionada:FichaAjedrez? = null
-            var posicionFichaSeleccionada:String? = null
+            var posiblesPosiciones:List<String> = ArrayList()//lista de posiciones posibles
+            var fichaSeleccionada:FichaAjedrez? = null//ficha seleccionada
+            var posicionFichaSeleccionada:String? = null//posicion de la ficha seleccionada
+            var celdaSeleccionada:CasilaAjedrez? = null//celda seleccionada
+
         override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+            //las posiciones pintadas de verde se ponen de nuevo en su color
             if (posiblesPosiciones != null){
                 for (posicion in posiblesPosiciones){
                     changeCeldaColor("normal",posicion)
                 }
             }
+
             if (fichaSeleccionada!=null){
                 fichas.remove(posicionFichaSeleccionada)
                 fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
                 fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
             }
+
+            //recogemos la posicion de la casilla que se ha tocado
             val x = Gdx.input.x
             val y = (Gdx.input.y-Gdx.graphics.height)*-1
-            println("tocado en ${x} ${y}")
-            var ficha = false
+
+            println("tocado en ${x} ${y}")//se indica donde se ha tocado
+
+            //detectamos que celda se ha pulsado
+            for (celda in tablero){
+                if (celda.value.boundingRectangle.contains(x.toFloat(),y.toFloat())&&posiblesPosiciones.contains(celda.key)){
+                    celdaSeleccionada = celda.value
+                }
+            }
+            var ficha = false//variable que se usara si se ha tocado una ficha o una celda vacia
+            //se comprueba si se ha tocado una ficha
             for(sprite in spriteList){
                 if (sprite.boundingRectangle.contains(x.toFloat(),y.toFloat())){
-                    ficha = true
+                    ficha = true//se indica que se a pulsado una tecla
                     for (fichaa in fichas){
                         if (fichaa.value.boundingRectangle.contains(x.toFloat(),y.toFloat())){
                             fichaSeleccionada = fichaa.value
@@ -91,17 +117,22 @@ class AjedrezController: ApplicationAdapter() {
                     }
                 }
             }
+            //si no se ha pulsado una ficha se ha pulsado una celda vacia
             if (!ficha){
-                if(posiblesPosiciones != null){
-                    for (celda in tablero){
-                        if (celda.value.boundingRectangle.contains(x.toFloat(),y.toFloat())&&posiblesPosiciones.contains(celda.key)){
-                            fichas.remove(posicionFichaSeleccionada)
+                //se comprueba si hay posibles posiciones
+                if(posiblesPosiciones != null && fichaSeleccionada != null){
+                    //se comprueba si la celda pulsada esta en la lista de posibles posiciones
+                    if (posiblesPosiciones.contains(celdaSeleccionada!!.posicion)){
                             fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
-                            fichaSeleccionada!!.setPosition(celda.value.x,celda.value.y)
-                            fichas.put(celda.key,fichaSeleccionada!!)
+
+                            fichas.remove(posicionFichaSeleccionada)
+
+                            fichaSeleccionada!!.setPosition(celdaSeleccionada!!.x,celdaSeleccionada!!.y)
+                            fichas.put(getKeyOfCell(celdaSeleccionada!!),fichaSeleccionada!!)
                         }
-                    }
                 }
+
+
             }else{
                 posiblesPosiciones = comprobarCasillas(fichaSeleccionada!!,posicionFichaSeleccionada!!)
                 for (posicion in posiblesPosiciones){
@@ -114,35 +145,66 @@ class AjedrezController: ApplicationAdapter() {
           return true
         }
 
-        override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-            println("soltada")
-            return true
         }
+        posicionInicialY = (Gdx.graphics.height.toFloat()-Gdx.graphics.width.toFloat())
+    }
+
+    /**
+     *Metodo que realiza las acciones necesarias mover una ficha
+     */
+    fun moverFicha(ficha:FichaAjedrez,posicion:String){
+        var posicionAtual = getKeyOfFicha(ficha)
+        var celdaFutura = tablero.get(posicion)
+
+        if (posicionAtual != ""){
+            fichas.remove(posicionAtual)
+            ficha.setPosition(celdaFutura!!.x,celdaFutura!!.y)
+            ficha.setSize(tamañoCelda,tamañoCelda)
+            fichas.put(posicion,ficha)
         }
     }
 
     companion object{
+        var posicionInicialY = 0f
         var tamañoCelda = 0f
         var turno = 0
         var someMove = true
         var spriteList = mutableListOf<Sprite>()
         var tablero = mutableMapOf<String, CasilaAjedrez>()
         var fichas = mutableMapOf<String, FichaAjedrez>()
+        val posicionPantalla = mutableMapOf<String, Vector2>()//por casa posicion del tablero almacenamos su posicion en la pantalla
         fun vaciarListaSprites(){
             spriteList.clear()
         }
         fun incrementarTurno(){
             turno++
         }
-        fun hasSomeMove(){
-            someMove = true
+
+        fun getKeyOfCell(cell:CasilaAjedrez):String{
+            for (celda in tablero){
+                if (celda.value == cell){
+                    return celda.key
+                }
+            }
+            return ""
         }
+        fun getKeyOfFicha(ficha:FichaAjedrez):String{
+            for (fichaa in fichas){
+                if (fichaa.value == ficha){
+                    return fichaa.key
+                }
+            }
+            return ""
+        }
+
+
+
     }
 
     override fun render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         printTablero(tamañoCelda)
-
+        pintarInterfaz()
     }
 
     /**
@@ -265,6 +327,7 @@ class AjedrezController: ApplicationAdapter() {
         fichaReinaNegraTexture.dispose()
         fichaReyBlancoTexture.dispose()
         fichaReyNegroTexture.dispose()
+        texturaLadrillo.dispose()
         batch!!.dispose()
     }
 
@@ -273,11 +336,12 @@ class AjedrezController: ApplicationAdapter() {
      */
     fun getTableroNuevo(tamañoCelda: Float) {
         var texture: Texture? = null
+        posicionInicialY = (Gdx.graphics.height.toFloat()-Gdx.graphics.width.toFloat())/2
         for(linea in 1..8){
             for (letra in 1..8){
                 var posicion = "${getColumna(letra)}-${linea}"
                 val posicionX = (letra - 1) * tamañoCelda
-                val posicionY = (linea - 1) * tamañoCelda
+                val posicionY = ((linea - 1) * tamañoCelda)+ posicionInicialY
                 val color = if ((linea + letra) % 2 == 1) "negra" else "blanco"
                 if (color == "blanco"){
                     texture = celdaBlancaTexture
@@ -293,6 +357,7 @@ class AjedrezController: ApplicationAdapter() {
                 fichaAjedrez.setPosition(posicionX,posicionY)
                 casillaAjedrez.texture = texture
                 tablero.put(posicion,casillaAjedrez)
+                posicionPantalla.put(posicion, Vector2(posicionX,posicionY))
                 if (fichaAjedrez.color != "vacía"){
                     fichas.put(posicion,fichaAjedrez)
                 }
@@ -488,8 +553,6 @@ class AjedrezController: ApplicationAdapter() {
         for (ficha in fichas.values) {
             pintarFicha(ficha,ficha.x,ficha.y,ficha.width)
         }
-
-
         batch.end()
 
     }
@@ -580,5 +643,13 @@ class AjedrezController: ApplicationAdapter() {
         }
         tablero.put(posicion, casilla)
     }
-
+    fun pintarInterfaz(){
+        var inferior = Sprite(texturaLadrillo,0,0,Gdx.graphics.width, (Gdx.graphics.height-Gdx.graphics.width)/2)
+        //pintar
+        batch.begin()
+        //superior.draw(batch)
+        inferior.draw(batch)
+        batch.draw(texturaLadrillo,0f,((Gdx.graphics.height-Gdx.graphics.width)+(Gdx.graphics.width/2)).toFloat(),Gdx.graphics.width.toFloat(), ((Gdx.graphics.height-Gdx.graphics.width)/2).toFloat())
+        batch.end()
+    }
 }
