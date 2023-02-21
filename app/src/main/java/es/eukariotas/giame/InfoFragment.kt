@@ -19,6 +19,7 @@ class InfoFragment : Fragment() {
     ): View? {
         _binding = FragmentInfoBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
 
