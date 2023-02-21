@@ -47,7 +47,7 @@ class ConexionFragment : Fragment() {
         binding.btMaquina.setOnClickListener {
             tipoJuego = "maquina"
             when(juego){
-                "ajedrez" -> startActivity(Intent( activity, AjedrezLauncher::class.java))
+                "ajedrez" -> startActivity(Intent(activity, AjedrezLauncher::class.java))
                 "aviones" -> startActivity(Intent(activity, AvionesLauncher::class.java))
                 "enraya" -> findNavController().navigate(R.id.action_ConexionFragment_to_SecondFragment)
             }

@@ -48,12 +48,8 @@ class FirstFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_ConexionFragment)
         }
         binding.bt3enRaya.setOnClickListener {
-            val intent = Intent( activity, TicTacToeLauncher::class.java)
-            startActivity(intent)
-        }
-
-        binding.bt3enRaya.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            ConexionFragment.juego = "enraya"
+            findNavController().navigate(R.id.action_FirstFragment_to_ConexionFragment)
         }
 
     }
