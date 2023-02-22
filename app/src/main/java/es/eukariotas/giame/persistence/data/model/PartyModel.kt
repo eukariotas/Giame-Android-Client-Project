@@ -11,5 +11,5 @@ data class PartyModel(
     @SerializedName("date") val date :String,
     @SerializedName("max_player") val maxPlayer :Int,
     @SerializedName("tipe_game") val tipeGame :String,
-    @SerializedName("state") val state :Boolean
+    @SerializedName("state") val state :String,
 ) :Parcelable{}
