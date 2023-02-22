@@ -85,37 +85,32 @@ data class FichaAjedrez(
      * Funcion que devuelve las posiciones posibles de un alfil
      */
     fun posibleMoveAlfil(posicion:String):List<String>{
-        val posibles = mutableListOf<String>()
-        val pos = posicion.split("-")
-        val letra = pos[0]
-        val posicionLetra = letras.indexOf(letra)
-        val numero = pos[1].toInt()
-        if (numero-1 >= 1){
-            var contador = 0
-            for (i in numero-1 .. 1){
-                contador++
-                if (posicionLetra-contador >= 0){
-                    posibles.add("${letras[posicionLetra-contador]}-$i")
-                }
-                if (posicionLetra+contador <= 7){
-                    posibles.add("${letras[posicionLetra+contador]}-$i")
-                }
+        val filas = "12345678"
+        val columnas = "abcdefgh"
+        val posFila = filas.indexOf(posicion[2])
+        val posColumna = columnas.indexOf(posicion[0])
+        val movimientos = mutableListOf<String>()
+
+        for (i in 1 until 8) {
+            // Movimientos hacia arriba-derecha
+            if (posFila + i < 8 && posColumna + i < 8) {
+                movimientos.add("${columnas[posColumna + i]}-${filas[posFila + i]}")
+            }
+            // Movimientos hacia arriba-izquierda
+            if (posFila + i < 8 && posColumna - i >= 0) {
+                movimientos.add("${columnas[posColumna - i]}-${filas[posFila + i]}")
+            }
+            // Movimientos hacia abajo-derecha
+            if (posFila - i >= 0 && posColumna + i < 8) {
+                movimientos.add("${columnas[posColumna + i]}-${filas[posFila - i]}")
+            }
+            // Movimientos hacia abajo-izquierda
+            if (posFila - i >= 0 && posColumna - i >= 0) {
+                movimientos.add("${columnas[posColumna - i]}-${filas[posFila - i]}")
             }
         }
-        if (numero+1 <= 8){
-            var contador = 0
-           for (i in numero+1 .. 8){
-                contador++
-                if (posicionLetra-contador >= 0){
-                     posibles.add("${letras[posicionLetra-contador]}-$i")
-                }
-                if (posicionLetra+contador <= 7){
-                     posibles.add("${letras[posicionLetra+contador]}-$i")
-                }
-           }
-        }
 
-        return posibles
+        return movimientos
     }
 
     /**
@@ -166,6 +161,7 @@ data class FichaAjedrez(
             }
         }else{
             if (numero == 7){
+                println("peon en 7")
                 posibles.add("$letra-${numero-1}")
                 posibles.add("$letra-${numero-2}")
             }else{

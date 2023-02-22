@@ -93,8 +93,7 @@ class AvionesController : ApplicationAdapter() {
         //mr.render()
         batch.projectionMatrix = camera.combined;
 
-
-
+        
         if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -1f) {
             this.rBody.applyLinearImpulse(-0.80f, 0F, pos.x, pos.y, true);
         }
@@ -120,7 +119,7 @@ class AvionesController : ApplicationAdapter() {
         //batch.draw(rTexture, rBody.position.x, rBody.position.y)
         batch.draw(Texture(Gdx.files.internal("espacio.png")), 0f, 0f)
 
-        batch.draw(Rocket().getRocket(), rBody.position.x-22, rBody.position.y-22)
+        batch.draw(Rocket().getRocket(), rBody.position.x, rBody.position.y)
 
         for(mBody in meteors){
             batch.draw(Meteor().getMeteor(), mBody.position.x, mBody.position.y)
