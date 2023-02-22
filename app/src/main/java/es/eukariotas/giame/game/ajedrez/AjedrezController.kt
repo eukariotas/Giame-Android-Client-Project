@@ -32,6 +32,8 @@ class AjedrezController: ApplicationAdapter() {
     lateinit var fichaReyNegroTexture:Texture
     lateinit var celdaVerdeBlanca:Texture
     lateinit var celdaVerdeNegra:Texture
+    lateinit var celdaRojaBlanca:Texture
+    lateinit var celdaRojaNegra:Texture
 
     private var camera: OrthographicCamera? = null
     lateinit var batch:SpriteBatch
@@ -63,121 +65,165 @@ class AjedrezController: ApplicationAdapter() {
         fichaReyNegroTexture = Texture(Gdx.files.internal("reiNegro.png"))
         celdaVerdeBlanca = Texture(Gdx.files.internal("celdaVerdeBlanca.png"))
         celdaVerdeNegra = Texture(Gdx.files.internal("celdaVerdeNegra.png"))
+        celdaRojaBlanca = Texture(Gdx.files.internal("celdaRojaBlanca.png"))
+        celdaRojaNegra = Texture(Gdx.files.internal("celdaRojaNegra.png"))
         //se crea la camara
         camera = OrthographicCamera()
         camera!!.setToOrtho(false, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         batch = SpriteBatch()
         //se crea el tablero con las fichas
         getTableroNuevo(tamañoCelda)
-
+        //calculo la posicion donde comenara a pintarse el tablero
+        posicionInicialY = (Gdx.graphics.height.toFloat()-Gdx.graphics.width.toFloat())
         //el input processor se encarga de los eventos de entrada
         Gdx.input.inputProcessor = object : InputAdapter(){
             var posiblesPosiciones:List<String> = ArrayList()//lista de posiciones posibles
+
             var fichaSeleccionada:FichaAjedrez? = null//ficha seleccionada
             var posicionFichaSeleccionada:String? = null//posicion de la ficha seleccionada
-            var celdaSeleccionada:CasilaAjedrez? = null//celda seleccionada
+
+            var fichaPulsada:FichaAjedrez? = null//ficha pulsada
+            var celdaPulsada:CasilaAjedrez? = null//celda seleccionada
+            var posicionCeldaPulsada:String? = null//posicion de la celda seleccionada
 
         override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-            //las posiciones pintadas de verde se ponen de nuevo en su color
-            if (posiblesPosiciones != null){
-                for (posicion in posiblesPosiciones){
-                    changeCeldaColor("normal",posicion)
-                }
-            }
-
-            if (fichaSeleccionada!=null){
-                fichas.remove(posicionFichaSeleccionada)
-                fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
-                fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
-            }
-
             //recogemos la posicion de la casilla que se ha tocado
             val x = Gdx.input.x
             val y = (Gdx.input.y-Gdx.graphics.height)*-1
-
             println("tocado en ${x} ${y}")//se indica donde se ha tocado
 
-            //detectamos que celda se ha pulsado
+            //se obtiene la celda pulsada
             for (celda in tablero){
-                if (celda.value.boundingRectangle.contains(x.toFloat(),y.toFloat())&&posiblesPosiciones.contains(celda.key)){
-                    celdaSeleccionada = celda.value
+                if (celda.value.boundingRectangle.contains(x.toFloat(),y.toFloat())){
+                    celdaPulsada = celda.value
+                    posicionCeldaPulsada = celda.key
+                    println("celda pulsada ${celda.key}")
                 }
             }
-            var ficha = false//variable que se usara si se ha tocado una ficha o una celda vacia
-            //se comprueba si se ha tocado una ficha
-            for(sprite in spriteList){
-                if (sprite.boundingRectangle.contains(x.toFloat(),y.toFloat())){
-                    ficha = true//se indica que se a pulsado una tecla
-                    for (fichaa in fichas){
-                        if (fichaa.value.boundingRectangle.contains(x.toFloat(),y.toFloat())){
-                            fichaSeleccionada = fichaa.value
-                            posicionFichaSeleccionada = fichaa.key
+            //si se ha pulsado dentro del tablero se abra pulsado una celda
+            if(celdaPulsada!=null){
+                //se detecta si se ha pulsado sobre una ficha
+                fichaPulsada = fichas[posicionCeldaPulsada]
 
+                //se detecta si anteriormente una ficha estaba seleccionada
+                if (fichaSeleccionada !=null){
+                    //si se ha pulsado sobre una ficha
+                    if (fichaPulsada!=null){
+                        if (fichaPulsada!!.color== turnoColor()){
+                        //se ponen las celdas de su color original
+                        if (posiblesPosiciones != null){
+                            for (posicion in posiblesPosiciones){
+                                changeCeldaColor("normal",posicion)
+                            }
                         }
-                    }
-                }
-            }
-            //si no se ha pulsado una ficha se ha pulsado una celda vacia
-            if (!ficha){
-                //se comprueba si hay posibles posiciones
-                if(posiblesPosiciones != null && fichaSeleccionada != null){
-                    //se comprueba si la celda pulsada esta en la lista de posibles posiciones
-                    if (posiblesPosiciones.contains(celdaSeleccionada!!.posicion)){
-                            fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
-
+                        fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
+                        fichas.remove(posicionFichaSeleccionada)
+                        fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
+                        //si la ficha pulsada es la misma que la seleccionada se deselecciona
+                        if (fichaPulsada == fichaSeleccionada&&posicionCeldaPulsada == posicionFichaSeleccionada){
+                            fichaSeleccionada = null//se deselecciona la ficha
+                            posiblesPosiciones = ArrayList()//se vacia la lista de posiciones posibles
+                        }else{
+                            fichaSeleccionada = fichaPulsada//se selecciona la ficha pulsada
+                            posicionFichaSeleccionada = posicionCeldaPulsada
+                            posiblesPosiciones = comprobarCasillas(fichaSeleccionada!!,posicionFichaSeleccionada!!)
+                            for (posicion in posiblesPosiciones){
+                                if (isEnemy(posicion,fichaSeleccionada!!.color)){
+                                    changeCeldaColor("rojo",posicion)
+                                }else{
+                                changeCeldaColor("verde",posicion)
+                                }
+                            }
+                            fichaSeleccionada!!.setSize(tamañoCelda-10,tamañoCelda-10)
                             fichas.remove(posicionFichaSeleccionada)
-
-                            fichaSeleccionada!!.setPosition(celdaSeleccionada!!.x,celdaSeleccionada!!.y)
-                            fichas.put(getKeyOfCell(celdaSeleccionada!!),fichaSeleccionada!!)
+                            fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
                         }
+                        }else{
+                            //si se ha pulsado sobre una ficha enemiga se comprueba si se puede comer
+                            if (posiblesPosiciones.contains(posicionCeldaPulsada)){
+                                fichas.remove(posicionCeldaPulsada)//se elimina la ficha enemiga
+
+                                fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
+                                fichaSeleccionada!!.setPosition(celdaPulsada!!.x,celdaPulsada!!.y)
+                                fichas.remove(posicionFichaSeleccionada)
+                                fichas.put(posicionCeldaPulsada!!,fichaSeleccionada!!)
+
+                                for (posicion in posiblesPosiciones){
+                                    changeCeldaColor("normal",posicion)
+                                }
+                                fichaSeleccionada = null
+                                posiblesPosiciones = ArrayList()
+                                incrementarTurno()
+                            }
+                        }
+                    }else{
+                        //si se ha pulsado sobre una celda vacia
+                        //se comprueba si la celda pulsada esta en la lista de posiciones posibles
+                        if (posiblesPosiciones.contains(posicionCeldaPulsada)){
+                            //se mueve la ficha a la celda pulsada
+                            fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
+                            fichaSeleccionada!!.setPosition(celdaPulsada!!.x,celdaPulsada!!.y)
+                            fichas.remove(posicionFichaSeleccionada)
+                            fichas.put(posicionCeldaPulsada!!,fichaSeleccionada!!)
+                            //se ponen las celdas de su color original
+                            for (posicion in posiblesPosiciones){
+                                changeCeldaColor("normal",posicion)
+                            }
+                            fichaSeleccionada = null//se deselecciona la ficha
+                            posiblesPosiciones = ArrayList()//se vacia la lista de posiciones posibles
+                            incrementarTurno()
+                        }
+
+                    }
+                }else{
+                    //si no hay ninguna ficha seleccionada
+                    //se comprueba si se ha pulsado sobre una ficha
+                    if (fichaPulsada!=null&&fichaPulsada!!.color == turnoColor()){
+                        fichaSeleccionada = fichaPulsada//se selecciona la ficha pulsada
+                        posicionFichaSeleccionada = posicionCeldaPulsada//se guarda la posicion de la ficha seleccionada
+                        posiblesPosiciones = comprobarCasillas(fichaSeleccionada!!,posicionFichaSeleccionada!!)
+                        for (posicion in posiblesPosiciones){
+                            if (isEnemy(posicion,fichaSeleccionada!!.color)){
+                                changeCeldaColor("rojo",posicion)
+                            }else{
+                                changeCeldaColor("verde",posicion)
+                            }
+                        }
+                        fichaSeleccionada!!.setSize(tamañoCelda-10,tamañoCelda-10)
+                        fichas.remove(posicionFichaSeleccionada)
+                        fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
+                    }
+
                 }
-
-
             }else{
-                posiblesPosiciones = comprobarCasillas(fichaSeleccionada!!,posicionFichaSeleccionada!!)
-                for (posicion in posiblesPosiciones){
-                    changeCeldaColor("verde",posicion)
-                }
-                fichas.remove(posicionFichaSeleccionada)
-                fichaSeleccionada!!.setSize(tamañoCelda-10,tamañoCelda-10)
-                fichas.put(posicionFichaSeleccionada!!,fichaSeleccionada!!)
+                //TODO controlar la interfaz
+                println("se ha pulsado fuera del tablero")
             }
           return true
         }
-
-        }
-        posicionInicialY = (Gdx.graphics.height.toFloat()-Gdx.graphics.width.toFloat())
-    }
-
-    /**
-     *Metodo que realiza las acciones necesarias mover una ficha
-     */
-    fun moverFicha(ficha:FichaAjedrez,posicion:String){
-        var posicionAtual = getKeyOfFicha(ficha)
-        var celdaFutura = tablero.get(posicion)
-
-        if (posicionAtual != ""){
-            fichas.remove(posicionAtual)
-            ficha.setPosition(celdaFutura!!.x,celdaFutura!!.y)
-            ficha.setSize(tamañoCelda,tamañoCelda)
-            fichas.put(posicion,ficha)
         }
     }
+
+
 
     companion object{
         var posicionInicialY = 0f
         var tamañoCelda = 0f
-        var turno = 0
-        var someMove = true
+        var turno = 1
         var spriteList = mutableListOf<Sprite>()
         var tablero = mutableMapOf<String, CasilaAjedrez>()
         var fichas = mutableMapOf<String, FichaAjedrez>()
         val posicionPantalla = mutableMapOf<String, Vector2>()//por casa posicion del tablero almacenamos su posicion en la pantalla
-        fun vaciarListaSprites(){
-            spriteList.clear()
-        }
+
         fun incrementarTurno(){
             turno++
+        }
+        fun turnoColor():String{
+            if (turno%2==0){
+                return "negro"
+            }else{
+                return "blanco"
+            }
         }
 
         fun getKeyOfCell(cell:CasilaAjedrez):String{
@@ -367,78 +413,164 @@ class AjedrezController: ApplicationAdapter() {
 
     }
     fun comprobarCasillas(ficha: FichaAjedrez, posicion: String): List<String>{
-        val posiciones = ficha.getPosiblePosition(posicion)
+        val fila = posicion.split("-")[1].toInt()
+        val columna = FichaAjedrez.letras.indexOf(posicion.split("-")[0])+1
+        val posiciones = ficha.getPosiblePosition(posicion)//obtenemos todas las posiciones posibles
         val posicionesPosibles = mutableListOf<String>()
         if (ficha.tipo == "caballo"){
             for (posicion in posiciones){
-                if(isEmpy(posicion)){
+                if(isEnemy(posicion,ficha.color)){
+                    posicionesPosibles.add(posicion)
+                }else if (isEmpy(posicion)){
                     posicionesPosibles.add(posicion)
                 }
         }
             return posicionesPosibles
         }
-        var posicionesValidas = mutableListOf<String>()
-        for (posicion in posiciones){
-            if (!fichas.containsKey(posicion)){
-                posicionesValidas.add(posicion)
+        if (ficha.tipo == "peon"){
+            //comprobamos si hay enemigos
+            if (ficha.color=="blanco"){
+            var posiccionIzq = "${getColumna(columna-1)}-${fila+1}"
+            var posiccionDer = "${getColumna(columna+1)}-${fila+1}"
+            if (isEnemy(posiccionIzq,ficha.color)){
+                posicionesPosibles.add(posiccionIzq)
+            }
+            if (isEnemy(posiccionDer,ficha.color)){
+                posicionesPosibles.add(posiccionDer)
+            }
+                for (posicion in posiciones){
+                        if(isEmpy(posicion)){
+                        posicionesPosibles.add(posicion)
+                    }else{
+                        break
                     }
                 }
-
-
-        return comprobarVectores(posicionesValidas, posicion)
-    }
-    fun comprobarVectores(posiciones: List<String>, posicion: String):List<String>{
-        var posicionesValidas = mutableListOf<String>()
-        var columna = mutableListOf<String>()
-        var fila = mutableListOf<String>()
-        var diagonalIzq = mutableListOf<String>()
-        var diagonalDer = mutableListOf<String>()
-
-        //creamos la columma
-        for (p in posiciones){
-            if (p.split("-")[0] == posicion.split("-")[0]){
-                columna.add(p)
-            }
-        }
-        //verificamos la continuacion de la columna
-        columna.sort()
-        var columnaA = mutableListOf<String>()
-        var columnaB = mutableListOf<String>()
-        for (p in columna){
-            if (p.split("-")[1].toInt() < posicion.split("-")[1].toInt()){
-                columnaA.add(p)
             }else{
-                columnaB.add(p)
+                posiciones.sortedDescending()
+                var posiccionIzq = "${getColumna(columna-1)}-${fila-1}"
+                var posiccionDer = "${getColumna(columna+1)}-${fila-1}"
+                if (isEnemy(posiccionIzq,ficha.color)){
+                    posicionesPosibles.add(posiccionIzq)
+                }
+                if (isEnemy(posiccionDer,ficha.color)){
+                    posicionesPosibles.add(posiccionDer)
+                }
+                for (posicion in posiciones){
+                    if(isEmpy(posicion)){
+                        posicionesPosibles.add(posicion)
+                    }else{
+                        break
+                    }
+                }
             }
-        }
-        columnaA.sort()
-        var index = posicion.split("-")[1].toInt()
-        for (p in columnaA){
-            if (p.split("-")[1].toInt() == index - 1){
-                posicionesValidas.add(p)
-                index = p.split("-")[1].toInt()
-            }
-        }
-        columnaB.sort()
-        index = posicion.split("-")[1].toInt()
-        for (p in columnaB){
-            if (p.split("-")[1].toInt() == index + 1){
-                posicionesValidas.add(p)
-                index = p.split("-")[1].toInt()
-            }
-        }
 
 
-        //creamos la fila
-        for (p in posiciones){
-            if (p.split("-")[1] == posicion.split("-")[1]){
-                fila.add(p)
+            return posicionesPosibles
+        }
+
+        return comprobarVectores(posiciones,posicion,ficha)
+    }
+    fun comprobarVectores(posiciones: List<String>, posicion: String, ficha: FichaAjedrez):List<String>{
+        val filas = "12345678"
+        val columnas = "abcdefgh"
+
+        val posFila = filas.indexOf(posicion[2])
+        val posColumna = columnas.indexOf(posicion[0])
+
+        var posicionesAscendentes = mutableListOf<String>()
+        var posicionesDescendentes = mutableListOf<String>()
+        var posicionesIzquierda = mutableListOf<String>()
+        var posicionesDerecha = mutableListOf<String>()
+        var posicionesPosibles = mutableListOf<String>()
+
+        for (posicion in posiciones) {
+            val fila = filas.indexOf(posicion[2])
+            val columna = columnas.indexOf(posicion[0])
+
+            if (fila == posFila) {
+                if (columna > posColumna) {
+                    posicionesDerecha.add(posicion)
+                } else if (columna < posColumna) {
+                    posicionesIzquierda.add(posicion)
+                }
+            } else if (columna == posColumna) {
+                if (fila > posFila) {
+                    posicionesAscendentes.add(posicion)
+                } else if (fila < posFila) {
+                    posicionesDescendentes.add(posicion)
+                }
+            }
+
+        }
+        posicionesAscendentes.sorted()
+        println("posiciones ascendentes: ${posicionesAscendentes}")
+
+        posicionesDescendentes.sorted()
+        println("posicionesDescendentes: ${posicionesDescendentes}")
+        posicionesDescendentes = ordenarPosiciones(posicionesDescendentes) as MutableList<String>
+        println("posicionesDescendentes ordenadas: ${posicionesDescendentes}")
+
+        posicionesIzquierda.sortedDescending()
+        posicionesDerecha.sorted()
+
+        for (posicion in posicionesAscendentes) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
             }
         }
-        //creamos la diagonal izquierda
-        //creamos la diagonal derecha
-        //TODO falta crear las diagonales
-        return posicionesValidas
+        for (posicion in posicionesDescendentes) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
+            }
+        }
+        for (posicion in posicionesIzquierda) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
+            }
+        }
+        for (posicion in posicionesDerecha) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
+            }
+        }
+        return posicionesPosibles
+    }
+    fun ordenarPosiciones(posiciones: List<String>):List<String>{
+        var mapPos = mutableMapOf<Int,String>()
+        for (posicion in posiciones){
+            var fila = posicion[2].toString().toInt()
+            var columna = posicion[0].toString()
+            mapPos.put(fila,columna)
+        }
+        val mapaOrdenado = mapPos.toList()
+            .sortedByDescending { it.first }
+            .toMap()
+            .toMutableMap()
+        var posicionesOrdenadas = mutableListOf<String>()
+        for (posicion in mapaOrdenado){
+            posicionesOrdenadas.add("${posicion.value}-${posicion.key}")
+        }
+        return posicionesOrdenadas
     }
     fun getFicha(posicion: String): FichaAjedrez {
         var posiciones = posicion.split("-")
@@ -581,30 +713,21 @@ class AjedrezController: ApplicationAdapter() {
      * Detecta si la casilla de destino esta ocupada
      */
     fun isEmpy(posicion:String):Boolean{
-        if (fichas.get(posicion)==null){
-            return true
+        if (fichas[posicion]!=null){
+            return false
         }
-        return false
+        return true
     }
 
     /**
      * Detecta si la casilla de destino esta ocupada por una ficha del adversario
      */
-    fun isEnemy(posicion:String, enemyColor:String):Boolean{
+    fun isEnemy(posicion:String, myColor:String):Boolean{
        if(isEmpy(posicion)){
            return false
        }else {
-              for (i in fichas) {
-                if (i.key == posicion) {
-                     if (i.value.color == enemyColor) {
-                          return true
-                     } else {
-                          return false
-                     }
-                }
-              }
+           return fichas[posicion]!!.color != myColor
        }
-        throw Exception("Error al detectar enemigo")
     }
 
     /**
@@ -639,6 +762,11 @@ class AjedrezController: ApplicationAdapter() {
                 casilla!!.texture = celdaBlancaTexture
             } else {
                 casilla!!.texture = celdaNegraTexture
+            }
+            "rojo" -> if (casilla!!.color == "blanco") {
+                casilla!!.texture = celdaRojaBlanca
+            } else {
+                casilla!!.texture = celdaRojaNegra
             }
         }
         tablero.put(posicion, casilla)
