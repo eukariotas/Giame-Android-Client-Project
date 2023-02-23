@@ -463,8 +463,29 @@ class AjedrezController: ApplicationAdapter() {
                     }
                 }
             }
-
-
+            return posicionesPosibles
+        }
+        if (ficha.tipo == "torre"){
+            return comprobarVectores(posiciones,posicion,ficha)
+        }
+        if (ficha.tipo == "alfil"){
+            return clasificarPosicionesEnDiagonal(posiciones,posicion,ficha)
+        }
+        if (ficha.tipo == "reina"){
+            val posicionesTorre = comprobarVectores(ficha.posibleMoveTorre(posicion),posicion,ficha)
+            val posicionesAlfil = clasificarPosicionesEnDiagonal(ficha.posibleMoveAlfil(posicion),posicion,ficha)
+            posicionesPosibles.addAll(posicionesTorre)
+            posicionesPosibles.addAll(posicionesAlfil)
+            return posicionesPosibles
+        }
+        if (ficha.tipo == "rey"){
+            for (posicion in posiciones){
+                if(isEnemy(posicion,ficha.color)){
+                    posicionesPosibles.add(posicion)
+                }else if (isEmpy(posicion)){
+                    posicionesPosibles.add(posicion)
+                }
+            }
             return posicionesPosibles
         }
 
@@ -481,6 +502,7 @@ class AjedrezController: ApplicationAdapter() {
         var posicionesDescendentes = mutableListOf<String>()
         var posicionesIzquierda = mutableListOf<String>()
         var posicionesDerecha = mutableListOf<String>()
+
         var posicionesPosibles = mutableListOf<String>()
 
         for (posicion in posiciones) {
@@ -503,14 +525,9 @@ class AjedrezController: ApplicationAdapter() {
 
         }
         posicionesAscendentes.sorted()
-        println("posiciones ascendentes: ${posicionesAscendentes}")
-
         posicionesDescendentes.sorted()
-        println("posicionesDescendentes: ${posicionesDescendentes}")
         posicionesDescendentes = ordenarPosiciones(posicionesDescendentes) as MutableList<String>
-        println("posicionesDescendentes ordenadas: ${posicionesDescendentes}")
-
-        posicionesIzquierda.sortedDescending()
+        posicionesIzquierda = ordenarPosicionesColumna(posicionesIzquierda) as MutableList<String>
         posicionesDerecha.sorted()
 
         for (posicion in posicionesAscendentes) {
@@ -555,6 +572,97 @@ class AjedrezController: ApplicationAdapter() {
         }
         return posicionesPosibles
     }
+
+    fun clasificarPosicionesEnDiagonal(posiciones: List<String>, posicionInicial: String, ficha: FichaAjedrez): List<String> {
+
+        println("posiciones: $posiciones")
+        var diagonalAscendenteDerecha = mutableListOf<String>()
+        var diagonalAscendenteIzquierda = mutableListOf<String>()
+        var diagonalDescendenteDerecha = mutableListOf<String>()
+        var diagonalDescendenteIzquierda = mutableListOf<String>()
+
+        var posicionesPosibles = mutableListOf<String>()
+
+        var columnaInicial = FichaAjedrez.letras.indexOf(posicionInicial.split("-")[0])
+        val filaInicial = posicionInicial[2].toString().toInt()
+
+        for (posicion in posiciones) {
+            val columnaActual = FichaAjedrez.letras.indexOf(posicion.split("-")[0])
+            val filaActual = posicion[2].toString().toInt()
+
+            val diferenciaColumnas = columnaActual - columnaInicial
+            val diferenciaFilas = filaActual - filaInicial
+
+            if (diferenciaFilas == diferenciaColumnas) {
+                if (filaActual > filaInicial) {
+                    diagonalAscendenteDerecha.add(posicion)
+                }
+                else if (filaActual < filaInicial) {
+                    diagonalDescendenteIzquierda.add(posicion)
+                }
+            }
+            else if (diferenciaFilas == -diferenciaColumnas) {
+                if (filaActual > filaInicial) {
+                    diagonalAscendenteIzquierda.add(posicion)
+                }
+                else if (filaActual < filaInicial) {
+                    diagonalDescendenteDerecha.add(posicion)
+                }
+            }
+        }
+
+        diagonalAscendenteDerecha.sorted()
+        diagonalAscendenteIzquierda.sorted()
+        diagonalDescendenteDerecha.sorted()
+        diagonalDescendenteIzquierda.sorted()
+
+        for (posicion in diagonalAscendenteDerecha) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
+            }
+        }
+
+        for (posicion in diagonalAscendenteIzquierda) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
+            }
+        }
+
+        for (posicion in diagonalDescendenteDerecha) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
+            }
+        }
+
+        for (posicion in diagonalDescendenteIzquierda) {
+            if (isEmpy(posicion)) {
+                posicionesPosibles.add(posicion)
+            } else if (isEnemy(posicion, ficha.color)) {
+                posicionesPosibles.add(posicion)
+                break
+            } else {
+                break
+            }
+        }
+        return posicionesPosibles
+    }
+
+
     fun ordenarPosiciones(posiciones: List<String>):List<String>{
         var mapPos = mutableMapOf<Int,String>()
         for (posicion in posiciones){
@@ -569,6 +677,23 @@ class AjedrezController: ApplicationAdapter() {
         var posicionesOrdenadas = mutableListOf<String>()
         for (posicion in mapaOrdenado){
             posicionesOrdenadas.add("${posicion.value}-${posicion.key}")
+        }
+        return posicionesOrdenadas
+    }
+    fun ordenarPosicionesColumna(posiciones: List<String>):List<String>{
+        var mapPos = mutableMapOf<String,Int>()
+        for (posicion in posiciones){
+            var fila = posicion[2].toString().toInt()
+            var columna = posicion[0].toString()
+            mapPos.put(columna,fila)
+        }
+        val mapaOrdenado = mapPos.toList()
+            .sortedByDescending { it.first }
+            .toMap()
+            .toMutableMap()
+        var posicionesOrdenadas = mutableListOf<String>()
+        for (posicion in mapaOrdenado){
+            posicionesOrdenadas.add("${posicion.key}-${posicion.value}")
         }
         return posicionesOrdenadas
     }
