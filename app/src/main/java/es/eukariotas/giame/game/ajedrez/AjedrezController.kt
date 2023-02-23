@@ -9,7 +9,11 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+
 import es.eukariotas.giame.game.ajedrez.Object.CasilaAjedrez
 import es.eukariotas.giame.game.ajedrez.Object.FichaAjedrez
 
@@ -48,7 +52,7 @@ class AjedrezController: ApplicationAdapter() {
     override fun create() {
         tamañoCelda = Gdx.graphics.width.toFloat() / 8//se calcula el tamaño de las celdas
         //texturas
-        texturaLadrillo = Texture(Gdx.files.internal("wallPrint.png"))
+        texturaLadrillo = Texture(Gdx.files.internal("infterface.png"))
         celdaBlancaTexture = Texture(Gdx.files.internal("celdaBlanca.png"))
         celdaNegraTexture = Texture(Gdx.files.internal("celdaNegra.png"))
         fichaPeonBlancoTexture = Texture(Gdx.files.internal("peonBlanco.png"))
@@ -141,6 +145,7 @@ class AjedrezController: ApplicationAdapter() {
                         }else{
                             //si se ha pulsado sobre una ficha enemiga se comprueba si se puede comer
                             if (posiblesPosiciones.contains(posicionCeldaPulsada)){
+                                var fichaKill = fichas.get(posicionCeldaPulsada)
                                 fichas.remove(posicionCeldaPulsada)//se elimina la ficha enemiga
 
                                 fichaSeleccionada!!.setSize(tamañoCelda,tamañoCelda)
@@ -153,6 +158,14 @@ class AjedrezController: ApplicationAdapter() {
                                 }
                                 fichaSeleccionada = null
                                 posiblesPosiciones = ArrayList()
+                                if (fichaKill!!.tipo == "rey"){
+                                    println("fin del juego")
+                                    var tabla = mostrarMensajeFin()
+                                    tabla.setPosition(Gdx.graphics.width.toFloat()/2,Gdx.graphics.height.toFloat()/2)
+                                    batch.begin()
+                                    tabla.draw(batch,1f)
+                                    batch.end()
+                                }
                                 incrementarTurno()
                             }
                         }
@@ -897,12 +910,25 @@ class AjedrezController: ApplicationAdapter() {
         tablero.put(posicion, casilla)
     }
     fun pintarInterfaz(){
-        var inferior = Sprite(texturaLadrillo,0,0,Gdx.graphics.width, (Gdx.graphics.height-Gdx.graphics.width)/2)
         //pintar
         batch.begin()
         //superior.draw(batch)
-        inferior.draw(batch)
+
         batch.draw(texturaLadrillo,0f,((Gdx.graphics.height-Gdx.graphics.width)+(Gdx.graphics.width/2)).toFloat(),Gdx.graphics.width.toFloat(), ((Gdx.graphics.height-Gdx.graphics.width)/2).toFloat())
+        batch.draw(texturaLadrillo,0f,0f,Gdx.graphics.width.toFloat(), ((Gdx.graphics.height-Gdx.graphics.width)/2).toFloat())
         batch.end()
+    }
+    fun mostrarMensajeFin(): Table{
+        var tabla = Table()
+        var skin = Skin()
+        skin.add("fondo",texturaLadrillo)
+
+        tabla.skin = skin
+        tabla.background = skin.getDrawable("fondo")
+        tabla.setSize(100f,100f)
+        tabla.setFillParent(true)
+
+        return tabla
+
     }
 }
