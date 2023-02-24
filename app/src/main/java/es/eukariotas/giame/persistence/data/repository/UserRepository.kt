@@ -11,12 +11,7 @@ class UserRepository @Inject constructor(
          private val userDao: UserDao
 ) {
 
-    @Throws(Exception::class)
-    fun encrypt(data: ByteArray): ByteArray {
-        val md5 = MessageDigest.getInstance("MD5")
-        md5.update(data)
-        return md5.digest()
-    }
+
 
     suspend fun login(name: String, password: String):UserEntity{
         return api.login(name, password)

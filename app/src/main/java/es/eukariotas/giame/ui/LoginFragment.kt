@@ -5,15 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import es.eukariotas.giame.core.RetrofitHelper
 import es.eukariotas.giame.databinding.FragmentLoginBinding
 import es.eukariotas.giame.persistence.data.apiclient.UserApiClient
-import es.eukariotas.giame.persistence.data.domain.UserUseCase
-import es.eukariotas.giame.persistence.data.repository.UserRepository
-import es.eukariotas.giame.ui.viewmodel.UserViewModel
+import es.eukariotas.giame.persistence.security.md5
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,7 +59,7 @@ class LoginFragment : Fragment() {
 
     fun login(user: String, password:String){
         CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitHelper.getRetrofit().create(UserApiClient::class.java).login(user, password)
+            val call = RetrofitHelper.getRetrofit().create(UserApiClient::class.java).login(user, md5.encrypt(password))
             val response = call.body()//este es el usuario
             val header = call.headers()//este es el token
             if(call.isSuccessful){
