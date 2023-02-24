@@ -11,23 +11,23 @@ interface PartyApiClient {
     /**
      * Función que se usará para crear una partida
      */
-    @GET("/partida/create")
+    @GET("/partida/create/{tipo}")
     suspend fun createParty():Response<PartyModel>
     /**
      * Función que se usará para obtener el turno actual de una partida
      */
-    @GET("partida/turnos/{idPartida}")
-    suspend fun getTurn(@Path("idPartida") idPartida: Int): Response<TurnModel>
+    @GET("partida/turnos/{party_id}")
+    suspend fun getTurn(@Path("party_id") idPartida: Int): Response<TurnModel>
     /**
      * Función que se usará para unirse a una partida
      */
-    @GET("partida/join/{id_partida}")
-    suspend fun joinParty(@Path("id_partida") id_partida: Int): Response<PartyModel>
+    @GET("partida/join/{party_id}")
+    suspend fun joinParty(@Path("party_id") id_partida: Int): Response<PartyModel>
     /**
      * Función que se usará para obtener una partida
      */
-    @GET("partida/{idPartida}")
-    suspend fun getParty(@Path("idPartida") idPartida: Int): Response<PartyModel>
+    @GET("partida/{party_id}")
+    suspend fun getParty(@Path("party_id") idPartida: Int): Response<PartyModel>
     /**
      * Función que se usará para obtener las partidas abiertas
      */
