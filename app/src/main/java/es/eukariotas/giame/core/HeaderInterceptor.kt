@@ -1,5 +1,6 @@
 package es.eukariotas.giame.core
 
+import es.eukariotas.giame.persistence.DataBaseProv
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -11,8 +12,8 @@ import okhttp3.Response
 class HeaderInterceptor:Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
-            .addHeader("token", "prueba")
-            .addHeader("user", "miguel")
+            .addHeader("user", DataBaseProv.usuario.id.toString())
+            .addHeader("token", DataBaseProv.token)
             .build()
         return chain.proceed(request)
     }
