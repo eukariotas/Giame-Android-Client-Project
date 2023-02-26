@@ -17,7 +17,7 @@ class Meteor(): CircleShape() {
     private var meteorImage = TextureRegion(Texture(Gdx.files.internal("asteroides2.png")))
     private var yRand = MathUtils.random(0 + 64, 480 - 64)
     private var xRand = MathUtils.random(0 + 64, 800 - 64)
-    private var posMeteor = Vector2(xRand!!.toFloat(), yRand!!.toFloat())
+    private var posMeteor = Vector2(xRand.toFloat(), yRand.toFloat())
     private var meteorBodyDef = BodyDef().apply {
         type = BodyType.StaticBody
         position.set(posMeteor)

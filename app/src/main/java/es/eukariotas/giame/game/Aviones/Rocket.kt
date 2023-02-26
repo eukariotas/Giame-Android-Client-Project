@@ -20,17 +20,16 @@ class Rocket() : PolygonShape() {
 
     private var rocketBodyDef = BodyDef().apply {
         type = BodyDef.BodyType.DynamicBody
-        position.set(400f,240f)
+        position.set(posRocket.x, posRocket.y)
     }
     private var rocketShape = PolygonShape().apply {
-        setAsBox(32f, 32f)
+        setAsBox(11f, 32f)
     }
 
     private var rocketFixtureDef = FixtureDef().apply {
         shape = rocketShape
         density = 15f
         friction = .5f
-        restitution = .5f
     }
 
 
