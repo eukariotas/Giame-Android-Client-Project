@@ -123,10 +123,20 @@ class AvionesController : ApplicationAdapter() {
 
 
 
+        
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -1f) {
+            this.rBody.applyLinearImpulse(-0.80f, 0F, pos.x, pos.y, true);
+        }
+
+
+
 
         //batch.projectionMatrix = camera.combined
 
 
+
+
+        batch.draw(Rocket().getRocket(), rBody.position.x, rBody.position.y)
 
 
 

@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="es.eukariotas.giame.TicTacToeLogic"
+        android:name="es.eukariotas.giame.game.tresEnRaya.TicTacToeLogic"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
@@ -50,12 +50,6 @@
             app:destination="@id/FirstFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/AjedrezFragment"
-        android:name="es.eukariotas.giame.ui.AjedrezFragment"
-        android:label="@string/Ajedrez"
-        tools:layout="@layout/fragment_ajedrez">
-    </fragment>
     <fragment
         android:id="@+id/MenuFragment"
         android:name="es.eukariotas.giame.MenuFragment"
@@ -96,8 +90,16 @@
             android:id="@+id/action_ConexionFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
         <action
-            android:id="@+id/action_ConexionFragment_to_AjedrezFragment"
-            app:destination="@id/AjedrezFragment" />
+            android:id="@+id/action_ConexionFragment_to_BuscarPartidaFragment"
+            app:destination="@id/BuscarPartidaFragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/BuscarPartidaFragment"
+        android:name="es.eukariotas.giame.BuscarPartidaFragment"
+        android:label="@string/Buscar_partida"
+        tools:layout="@layout/fragment_buscar_partida" >
+        <action
+            android:id="@+id/action_BuscarPartidaFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
 </navigation>

@@ -52,5 +52,8 @@
     <string name="BuscarPartida">Buscar Partida</string>
     <string name="conexion">Conexion</string>
     <string name="acercade_header">Acerca de la aplicacion</string>
+    <string name="NombreCreador">NombreCreador</string>
+    <string name="Juego">Juego</string>
+    <string name="Buscar_partida">Buscar partida</string>
 
 </resources>
