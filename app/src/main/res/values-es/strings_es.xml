@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Giame</string>
+    <string name="action_settings">Settings</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="RamonDonante">Raamón maricón</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="password">password</string>
+    <string name="user_name">User Name</string>
+    <string name="login">login</string>
+    <string name="sign">Sign in</string>
+    <string name="enRaya">Tic Tac Toe</string>
+    <string name="Ajedrez">Ajedrez</string>
+    <string name="Avioncitos">Avioncitos</string>
+    <string name="game_fragment_label">Game Fragment</string>
+    <string name="noLogueado">Aun no te has logueado?</string>
+    <string name="Logueate">Login!</string>
+    <string name="noLogueado2">Aun no te has logueado?</string>
+    <string name="about">Acerca de</string>
+    <string name="Deslogueate">Logout</string>
+    <string name="logueado">Estas logueado como:</string>
+    <string name="ip">ip</string>
+    <string name="Ip_servidor">Ip del servidor</string>
+    <string name="puerto">Puerto:</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="configuracion">Configuracion</string>
+    <string name="Iniciar_Sesion">Iniciar Sesion</string>
+    <string name="JugarComoInvitado">Iniciar Como Invitado</string>
+    <string name="info">Info</string>
+    <string name="menu">Menu</string>
+    <string name="Info_header">Informacion sobre la aplicación</string>
+    <string name="acercaDe_text">Esta aplicación ha sido desarrollada por el grupo eukariota durante las asignaturas "programacion de servicios y procesos" y "programacion multimedia y dispositivos moviles" durante sus estudios en el IES severo Ochoa. Los integrantes del grupo son:</string>
+    <string name="RamonPagan">Ramon Pagan</string>
+    <string name="Manuel">Manuel Amoros</string>
+    <string name="Juanjo">Juanjo Gonzalvez</string>
+    <string name="JuegosDisponible_text">En esta aplicación se pueden jugar los siguientes juegos:</string>
+    <string name="TicTacToe">Tic Tac Toe</string>
+    <string name="TicTacToe_text">Juego de dos jugadores, que se juega en un tablero de tres filas por tres columnas. Los jugadores alternan en colocar una ficha en una casilla vacía del tablero. El objetivo del juego es conseguir colocar tres fichas en línea recta, ya sea horizontal, vertical o diagonal. El jugador que consiga colocar tres fichas en línea gana la partida.</string>
+    <string name="Ajedrez_text">Juego de ajedrez en el que se enfrentan dos jugadores, uno con las piezas blancas y otro con las negras. El objetivo del juego es capturar al rey del oponente mediante el movimiento de las piezas. El rey es la pieza más valiosa del juego, ya que si es capturado el jugador pierde la partida. Las piezas se mueven siguiendo unas reglas muy concretas, que se explican en el apartado de reglas.</string>
+    <string name="Avioncitos_text">Pfff que escriba esto Ramon</string>
+    <string name="online">Online</string>
+    <string name="Local">Local</string>
+    <string name="Solitario">Solitario</string>
+    <string name="CrearPartida">Crear Partida</string>
+    <string name="BuscarPartida">Buscar Partida</string>
+    <string name="conexion">Conexion</string>
+    <string name="acercade_header">Acerca de la aplicacion</string>
+    <string name="NombreCreador">NombreCreador</string>
+    <string name="Juego">Juego</string>
+    <string name="Buscar_partida">Buscar partida</string>
+    <string name="seleccionaIdioma">Selecciona un idioma</string>
+    <array name="idiomas">
+        <item>English</item>
+        <item>Español</item>
+        <item>Frances</item>
+        <item>Chino</item>
+    </array>
+</resources>
