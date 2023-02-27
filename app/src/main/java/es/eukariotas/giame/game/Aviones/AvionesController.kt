@@ -45,8 +45,8 @@ class AvionesController : ApplicationAdapter() {
     var winner: String? = null
     var p1x = 100
     var p1y = 250
-    var p2x = 400
-    var p2y = 250
+    var p2x = 2000
+    var p2y = 550
     var mx = 0
     var my = 0
     var speed1 = 2
@@ -94,8 +94,8 @@ class AvionesController : ApplicationAdapter() {
     }
 
     fun update() {
-        val p1current = Rectangle(p1x.toFloat(), p1y.toFloat(), 5.0f, 5.0f)
-        val p2current = Rectangle(p2x.toFloat(), p2y.toFloat(), 5.0f, 5.0f)
+        val p1current = Rectangle(p1x.toFloat(), p1y.toFloat(), 10.0f, 10.0f)
+        val p2current = Rectangle(p2x.toFloat(), p2y.toFloat(), 10.0f, 10.0f)
         if (trail1.contains(p1current)) {
             winner = "PLAYER 2"
             gameOn = false
@@ -115,7 +115,7 @@ class AvionesController : ApplicationAdapter() {
             trail2.add(p2current)
         }
         if (dir1 == "RIGHT") {
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                 speed1 = 3
                 p1x += speed1
             } else {
@@ -123,7 +123,7 @@ class AvionesController : ApplicationAdapter() {
                 p1x += speed1
             }
         } else if (dir1 == "LEFT") {
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                 speed1 = 3
                 p1x -= speed1
             } else {
@@ -131,7 +131,7 @@ class AvionesController : ApplicationAdapter() {
                 p1x -= speed1
             }
         } else if (dir1 == "UP") {
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                 speed1 = 3
                 p1y += speed1
             } else {
@@ -139,7 +139,7 @@ class AvionesController : ApplicationAdapter() {
                 p1y += speed1
             }
         } else if (dir1 == "DOWN") {
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                 speed1 = 3
                 p1y -= speed1
             } else {
@@ -148,6 +148,7 @@ class AvionesController : ApplicationAdapter() {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && dir1 != "LEFT") {
+            println("yes")
             dir1 = "RIGHT"
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && dir1 != "RIGHT") {
             dir1 = "LEFT"
@@ -157,7 +158,7 @@ class AvionesController : ApplicationAdapter() {
             dir1 = "DOWN"
         }
         if (dir2 == "D") {
-            if (Gdx.input.isKeyPressed(59)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 speed2 = 3
                 p2x += speed2
             } else {
@@ -165,7 +166,7 @@ class AvionesController : ApplicationAdapter() {
                 p2x += speed2
             }
         } else if (dir2 == "A") {
-            if (Gdx.input.isKeyPressed(59)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 speed2 = 3
                 p2x -= speed2
             } else {
@@ -174,7 +175,7 @@ class AvionesController : ApplicationAdapter() {
             }
         }
         if (dir2 == "W") {
-            if (Gdx.input.isKeyPressed(59)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 speed2 = 3
                 p2y += speed2
             } else {
@@ -182,7 +183,7 @@ class AvionesController : ApplicationAdapter() {
                 p2y += speed2
             }
         } else if (dir2 == "S") {
-            if (Gdx.input.isKeyPressed(59)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 speed2 = 3
                 p2y -= speed2
             } else {
@@ -190,13 +191,13 @@ class AvionesController : ApplicationAdapter() {
                 p2y -= speed2
             }
         }
-        if (Gdx.input.isKeyJustPressed(32) && dir2 != "A") {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D) && dir2 != "A") {
             dir2 = "D"
-        } else if (Gdx.input.isKeyJustPressed(29) && dir2 != "D") {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.A) && dir2 != "D") {
             dir2 = "A"
-        } else if (Gdx.input.isKeyJustPressed(51) && dir2 != "S") {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.W) && dir2 != "S") {
             dir2 = "W"
-        } else if (Gdx.input.isKeyJustPressed(47) && dir2 != "W") {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.S) && dir2 != "W") {
             dir2 = "S"
         }
 
@@ -225,8 +226,8 @@ class AvionesController : ApplicationAdapter() {
                 shapeRenderer!!.end()
                 ++i
             }
-            if (p1x >= 0 && p1y >= 0 && p1x <= 500 && p1y <= 500) {
-                if (p2x < 0 || p2y < 0 || p2x > 500 || p2y > 500) {
+            if (p1x >= 0 && p1y >= 0 && p1x <= 2215 && p1y <= 1009) {
+                if (p2x < 0 || p2y < 0 || p2x > 2215 || p2y > 1009) {
                     page = "p1 winner"
                 }
             } else {
@@ -311,8 +312,8 @@ class AvionesController : ApplicationAdapter() {
     fun reset() {
         p1x = 100
         p1y = 250
-        p2x = 400
-        p2y = 250
+        p2x = 2000
+        p2y = 550
         dir1 = "RIGHT"
         dir2 = "A"
         winner = ""
@@ -335,6 +336,7 @@ class AvionesController : ApplicationAdapter() {
         inst!!.setPosition(350.0f, 15.0f)
         inst!!.draw(batch)
         batch!!.end()
+        println("tocado en ${mx} ${my}")
         if (mx >= 94 && mx <= 653 && my >= 882 && my <= 981) {
             batch!!.begin()
             startHigh!!.setSize(130.0f, 50.0f)
