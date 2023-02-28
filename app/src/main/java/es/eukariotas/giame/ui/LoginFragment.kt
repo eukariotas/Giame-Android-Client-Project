@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import es.eukariotas.giame.R
 import es.eukariotas.giame.core.RetrofitHelper
