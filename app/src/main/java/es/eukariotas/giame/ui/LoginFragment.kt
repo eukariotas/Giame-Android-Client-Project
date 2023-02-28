@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
 
     fun login(user: String, password:String){
         CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitHelper.getRetrofit().create(UserApiClient::class.java).login(user, md5.encrypt(password))
+            val call = RetrofitHelper.getRetrofit().create(UserApiClient::class.java).login(user, password)
             val response = call.body()//este es el usuario
             val header = call.headers()//este es el token
             if(call.isSuccessful){

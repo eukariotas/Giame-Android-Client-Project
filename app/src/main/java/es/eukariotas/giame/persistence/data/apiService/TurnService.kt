@@ -6,6 +6,6 @@ import javax.inject.Inject
 class TurnService@Inject constructor(
     private val api: TurnApiClient
 ) {
-    suspend fun getTurn(idTurno: Int):
+    suspend fun getTurn(idTurno: Int) = api.getTurn(idTurno)
 
 }

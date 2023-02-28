@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Giame</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="first_fragment_label">Premier fragment</string>
+    <string name="second_fragment_label">Deuxième fragment</string>
+    <string name="next">Suivant</string>
+    <string name="previous">Précédent</string>
+    <string name="RamonDonante">Raamón maricón</string>
+    <string name="hello_first_fragment">Bonjour premier fragment</string>
+    <string name="hello_second_fragment">Bonjour deuxième fragment. Arg: %1$s</string>
+    <string name="hello_blank_fragment">Bonjour fragment vide</string>
+    <string name="password">Mot de passe</string>
+    <string name="user_name">Nom d utilisateur</string>
+    <string name="login">Connexion</string>
+    <string name="sign">Se connecter</string>
+    <string name="enRaya">Morpion</string>
+    <string name="Ajedrez">Échecs</string>
+    <string name="Avioncitos">Avioncitos</string>
+    <string name="game_fragment_label">Fragment de jeu</string>
+    <string name="noLogueado">Tu n es pas encore connecté?</string>
+    <string name="Logueate">Connectez-vous!</string>
+    <string name="noLogueado2">Tu n es pas encore connecté?</string>
+    <string name="about">À propos</string>
+    <string name="Deslogueate">Déconnexion</string>
+    <string name="logueado">Vous êtes connecté en tant que:</string>
+    <string name="ip">ip</string>
+    <string name="Ip_servidor">Adresse IP du serveur</string>
+    <string name="puerto">Port:</string>
+    <string name="guardar">Enregistrer</string>
+    <string name="cancelar">Annuler</string>
+    <string name="configuracion">Configuration</string>
+    <string name="Iniciar_Sesion">Se connecter</string>
+    <string name="JugarComoInvitado">Jouer en tant qu invité</string>
+    <string name="info">Info</string>
+    <string name="menu">Menu</string>
+    <string name="Info_header">Informations sur l application</string>
+    <string name="RamonPagan">Ramon Pagan</string>
+    <string name="Manuel">Manuel Amoros</string>
+    <string name="Juanjo">Juanjo Gonzalvez</string>
+    <string name="JuegosDisponible_text">Les jeux suivants sont disponibles dans cette application :</string>
+    <string name="TicTacToe">Morpion</string>
+    <string name="TicTacToe_text">Jeu à deux joueurs joué sur un tableau de trois rangées par trois colonnes. Les joueurs alternent en plaçant une pièce sur une case vide du tableau. Le but du jeu est de placer trois pièces en ligne droite, horizontalement, verticalement ou en diagonale. Le joueur qui réussit à placer trois pièces en ligne gagne la partie.</string>
+    <string name="Ajedrez_text">Jeu d échecs dans lequel deux joueurs s affrontent, l un avec les pièces blanches et l autre avec les noires. Le but du jeu est de capturer le roi de l adversaire en déplaçant les pièces. Le roi est la pièce la plus précieuse du jeu, car si elle est capturée, le joueur perd la partie. Les pièces se déplacent selon des règles très précises, expliquées dans la section des règles.</string>
+    <string name="Avioncitos_text">Pfff que Ramon écrive cela</string>
+    <string name="online">En ligne</string>
+    <string name="Local">Local</string>
+    <string name="Solitario">Solitaire</string>
+    <string name="CrearPartida">Créer une partie</string>
+    <string name="BuscarPartida">Rechercher une partie</string>
+    <string name="conexion">Connexion</string>
+    <string name="acercaDe_text">Cette application a été développée par le groupe eukariota pendant les cours de programmation de services et de processus" et "programmation multimédia et de dispositifs mobiles" lors de leurs études à lIES Severo Ochoa. Les membres du groupe sont :</string>
+    <string name="acercade_header">À propos de l application</string>
+    <string name="NombreCreador">Nom du créateur</string>
+    <string name="Juego">Jeu</string>
+    <string name="Buscar_partida">Rechercher une partie</string>
+    <string name="seleccionaIdioma">Sélectionnez une langue</string>
+    <array name="idiomas">
+        <item>Anglais</item>
+        <item>Espagnol</item>
+        <item>Français</item>
+        <item>Chinois</item>
+    </array>
+</resources>

@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Giame</string>
+    <string name="action_settings">设置</string>
+    <string name="first_fragment_label">第一个片段</string>
+    <string name="second_fragment_label">第二个片段</string>
+    <string name="next">下一页</string>
+    <string name="previous">上一页</string>
+    <string name="RamonDonante">Ramon捐赠者</string>
+    <string name="hello_first_fragment">你好第一个片段</string>
+    <string name="hello_second_fragment">你好第二个片段。参数： %1$s</string>
+    <string name="hello_blank_fragment">你好空白片段</string>
+    <string name="password">密码</string>
+    <string name="user_name">用户名</string>
+    <string name="login">登录</string>
+    <string name="sign">登录</string>
+    <string name="enRaya">井字棋</string>
+    <string name="Ajedrez">象棋</string>
+    <string name="Avioncitos">小飞机</string>
+    <string name="game_fragment_label">游戏片段</string>
+    <string name="noLogueado">你还没有登录吗？</string>
+    <string name="Logueate">登录！</string>
+    <string name="noLogueado2">你还没有登录吗？</string>
+    <string name="about">关于</string>
+    <string name="Deslogueate">登出</string>
+    <string name="logueado">已登录为:</string>
+    <string name="ip">ip</string>
+    <string name="Ip_servidor">服务器ip</string>
+    <string name="puerto">端口:</string>
+    <string name="guardar">保存</string>
+    <string name="cancelar">取消</string>
+    <string name="configuracion">设置</string>
+    <string name="Iniciar_Sesion">登录</string>
+    <string name="JugarComoInvitado">以访客身份登录</string>
+    <string name="info">信息</string>
+    <string name="menu">菜单</string>
+    <string name="Info_header">关于应用程序</string>
+    <string name="acercaDe_text">此应用程序由eukariota小组开发，在“服务和进程编程”和“多媒体和移动设备编程”课程期间在IES severo Ochoa学习。小组成员为:</string>
+    <string name="RamonPagan">Ramon Pagan</string>
+    <string name="Manuel">Manuel Amoros</string>
+    <string name="Juanjo">Juanjo Gonzalvez</string>
+    <string name="JuegosDisponible_text">您可以在此应用程序中玩以下游戏：</string>
+    <string name="TicTacToe">井字游戏</string>
+    <string name="TicTacToe_text">一款两人玩的游戏，玩家在一个三行三列的棋盘上交替放置棋子。游戏的目标是将三个棋子排成一条直线，可以是横向、纵向或对角线。成功将三个棋子排成一条线的玩家获胜。</string>
+    <string name="Ajedrez_text">一种象棋游戏，两名玩家对阵，一名执白棋，一名执黑棋。游戏的目标是通过移动棋子来捉住对手的国王。国王是游戏中最有价值的棋子，如果被捉住，玩家就输了。棋子按照非常具体的规则移动，这些规则在规则部分中有解释。</string>
+    <string name="Avioncitos_text">呸，让拉蒙写这个</string>
+    <string name="online">在线</string>
+    <string name="Local">本地</string>
+    <string name="Solitario">单人游戏</string>
+    <string name="CrearPartida">创建游戏</string>
+    <string name="BuscarPartida">查找游戏</string>
+    <string name="conexion">连接</string>
+    <string name="acercade_header">关于应用</string>
+    <string name="NombreCreador">创建者姓名</string>
+    <string name="Juego">游戏</string>
+    <string name="Buscar_partida">查找游戏</string>
+    <string name="seleccionaIdioma">选择语言</string>
+    <array name="idiomas">
+        <item>英语</item>
+        <item>西班牙语</item>
+        <item>法语</item>
+        <item>中文</item>
+    </array>
+</resources>

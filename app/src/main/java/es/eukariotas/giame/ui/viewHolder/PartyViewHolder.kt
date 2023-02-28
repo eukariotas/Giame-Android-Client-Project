@@ -8,7 +8,7 @@ import es.eukariotas.giame.persistence.data.model.PartyModel
 class PartyViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val binding = ItemPartidaBinding.bind(view)
     fun bind(item: PartyModel) {
-        binding.tvNombreCreador.text = item.state
+        binding.tvNombreCreador.text = item.status
         binding.tvTipoJuego.text = item.tipeGame
 
     }
