@@ -11,6 +11,9 @@ import androidx.navigation.fragment.findNavController
 import es.eukariotas.giame.R
 import es.eukariotas.giame.databinding.FragmentConfigurationBinding
 import es.eukariotas.giame.databinding.FragmentLoginBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -44,6 +47,21 @@ class ConfigurationFragment : Fragment() {
         binding.btCancelar.setOnClickListener {
             requireActivity().onBackPressed();
         }
+        binding.btProvConec.setOnClickListener {
+            serverIp = binding.etIpServer.text.toString()
+            serverPort = binding.etPuerto.text.toString()
+            CoroutineScope(Dispatchers.IO).launch {
+                if (ping(serverIp)) {
+                    requireActivity().runOnUiThread {
+                        Toast.makeText(context, "Conexión establecida", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    requireActivity().runOnUiThread {
+                        Toast.makeText(context, "No se ha podido establecer conexión", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
         //añado un adapter con los idiomas al spinner
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
@@ -74,5 +92,14 @@ class ConfigurationFragment : Fragment() {
         val configuration = resources.configuration
         configuration.setLocale(locale)
         resources.updateConfiguration(configuration, resources.displayMetrics)
+    }
+
+    fun ping(ip: String): Boolean {
+        try {
+            val p = ProcessBuilder("ping", "-c", "1", ip).start()
+            return p.waitFor() == 0
+        } catch (e: Exception) {
+            return false
+        }
     }
 }

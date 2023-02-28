@@ -15,7 +15,7 @@
         android:src="@drawable/fondoconfig"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -33,7 +33,7 @@
         android:id="@+id/btGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="72dp"
+        android:layout_marginEnd="52dp"
         android:layout_marginBottom="244dp"
         android:text="@string/guardar"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,7 +75,7 @@
         android:id="@+id/btCancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="88dp"
+        android:layout_marginEnd="124dp"
         android:layout_marginBottom="244dp"
         android:text="@string/cancelar"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,6 +98,16 @@
         android:text="@string/seleccionaIdioma"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/spIdioma"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btProvConec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
+        android:text="@string/ProbarConexion"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

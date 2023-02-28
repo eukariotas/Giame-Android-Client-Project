@@ -7,7 +7,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface PartyApiClient {
-
     /**
      * Función que se usará para crear una partida
      */

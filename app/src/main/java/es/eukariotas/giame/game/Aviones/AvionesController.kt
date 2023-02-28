@@ -63,7 +63,7 @@ class AvionesController : ApplicationAdapter() {
     override fun create() {
         batch = SpriteBatch()
         camera.setToOrtho(false, 500F, 500F)
-        main = Texture("menu.jpg")
+        main = Texture("Menu.jpg")
         menu = Sprite(main)
         instMenu = Texture("Instruct.png")
         instruct = Sprite(instMenu)
@@ -336,7 +336,7 @@ class AvionesController : ApplicationAdapter() {
         inst!!.setPosition(350.0f, 15.0f)
         inst!!.draw(batch)
         batch!!.end()
-        println("tocado en ${mx} ${my}")
+        //println("tocado en ${mx} ${my}")
         if (mx >= 94 && mx <= 653 && my >= 882 && my <= 981) {
             batch!!.begin()
             startHigh!!.setSize(130.0f, 50.0f)
