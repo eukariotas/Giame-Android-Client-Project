@@ -1,14 +1,13 @@
 package es.eukariotas.giame.game.Aviones
 
+import android.os.Bundle
 import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 
 class AvionesLauncher: AndroidApplication() {
-    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var config = AndroidApplicationConfiguration()
-        config.useAccelerometer = false
-        config.useCompass = false
+        val config = AndroidApplicationConfiguration()
         return initialize(AvionesController(), config)
     }
 }
