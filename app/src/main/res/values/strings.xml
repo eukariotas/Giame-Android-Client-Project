@@ -55,5 +55,6 @@
     <string name="NombreCreador">NombreCreador</string>
     <string name="Juego">Juego</string>
     <string name="Buscar_partida">Buscar partida</string>
+    <string name="Reiniciar">Reiniciar</string>
 
 </resources>
