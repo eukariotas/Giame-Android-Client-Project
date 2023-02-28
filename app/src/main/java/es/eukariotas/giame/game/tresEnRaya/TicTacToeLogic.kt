@@ -267,8 +267,33 @@ binding.button8.setOnClickListener { clickfun(it) }
                     }
 
                 }
-                if (buttonSelected.isEnabled == true)
+                if (buttonSelected.isEnabled)
                     buttonSelected.isEnabled = false
             }
         }
+    fun takeInfo(board: Array<Array<Int>>): String {
+        val sb = StringBuilder()
+        for (row in board) {
+            for (cell in row) {
+                sb.append(cell)
+            }
+        }
+        return sb.toString()
+    }
+
+    fun delvoverInfo(takeInfo: String): Array<CharArray> {
+        val state = Array(3) { CharArray(3) }
+        var index = 0
+
+        for (row in 0 until 3) {
+            for (col in 0 until 3) {
+                state[row][col] = takeInfo[index]
+                index++
+            }
+        }
+
+        return state
+    }
+
+
     }
