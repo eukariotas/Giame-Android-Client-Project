@@ -11,7 +11,7 @@ interface PartyApiClient {
      * Función que se usará para crear una partida
      */
     @GET("/partida/create/{tipo}")
-    suspend fun createParty():Response<PartyModel>
+    suspend fun createParty(@Path("tipo") tipo:String):Response<PartyModel>
     /**
      * Función que se usará para obtener el turno actual de una partida
      */
