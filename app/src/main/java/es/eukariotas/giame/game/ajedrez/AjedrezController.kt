@@ -22,7 +22,10 @@ import es.eukariotas.giame.persistence.data.apiclient.PartyApiClient
 import es.eukariotas.giame.persistence.data.apiclient.TurnApiClient
 import es.eukariotas.giame.persistence.data.model.TurnModel
 import es.eukariotas.giame.persistence.database.entities.TurnEntity
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AjedrezController: ApplicationAdapter() {
     private lateinit var stage: Stage
@@ -69,7 +72,9 @@ class AjedrezController: ApplicationAdapter() {
             }
 
             estado = "open"
-            esperarContrario()
+            if(DataBaseProv.playerNum == 1){
+                esperarContrario()
+            }
         }
 
 
@@ -263,19 +268,16 @@ class AjedrezController: ApplicationAdapter() {
         fun incrementarTurno(){
             if(modo.equals("online")){
                 var posiciones = tableroToFen()
-                var turnoToSave =TurnModel(1, posiciones, turno,false, DataBaseProv.partidaActual!!)
+                var turnoToSave =TurnModel(DataBaseProv.partidaActual!!.id+turno, posiciones, turno,false, DataBaseProv.partidaActual!!)
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val call = RetrofitHelper.getRetrofit().create(TurnApiClient::class.java).saveTurno(turnoToSave)
-                            val response = call.execute()
-                            if(response.isSuccessful){
-                                val turno = response.body()
-                                println("Turno guardado")
-                            }else{
-                                println("Error al guardar el turno")
-                            }
-
-
+                    val response = call.execute()
+                    if(response.isSuccessful){
+                        println("guardado")
+                    }else{
+                        println("error")
+                    }
                 }
 
             }else{

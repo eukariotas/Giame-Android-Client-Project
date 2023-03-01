@@ -38,34 +38,11 @@ class BuscarPartidaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        buscarPartidas()
         iniciarRecyclerView()
         partidasDisponibles()
 
 
 
-    }
-
-    private fun buscarPartidas() {
-        CoroutineScope(Dispatchers.IO).launch {
-            while (buscar) {
-                val call = RetrofitHelper.getRetrofit().create(PartyApiClient::class.java).getOpenParties()
-                if (call.isSuccessful) {
-                    val list = call.body()!!
-                    if (list.size != partyList.size) {
-                        partyList.clear()
-                        partyList.addAll(list)
-                        activity?.runOnUiThread {
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                }else{
-                    activity?.runOnUiThread {
-                        Toast.makeText(context, "Error al buscar partidas", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
     }
 
     private fun iniciarRecyclerView() {
@@ -74,10 +51,6 @@ class BuscarPartidaFragment : Fragment() {
         binding.rvPartidasAbiertas.adapter = adapter
     }
 
-    //Metodo que actualice la lista de partidas disponibles cada x tiempo
-    private fun actualizarListaPartidas() {
-
-    }
 
     //RecicleView con las partidas disponibles
     private fun partidasDisponibles() {
@@ -86,7 +59,7 @@ class BuscarPartidaFragment : Fragment() {
 
             if (call.isSuccessful) {
                 val list = call.body()!!
-                val openParties = list.filter { it.status == "open" }
+                val openParties = list.filter { it.tipeGame == ConexionFragment.juego}
                 if (openParties.size != partyList.size) {
                     partyList.clear()
                     partyList.addAll(openParties)
