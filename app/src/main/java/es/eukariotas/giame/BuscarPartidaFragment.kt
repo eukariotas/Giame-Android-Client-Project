@@ -1,5 +1,6 @@
 package es.eukariotas.giame
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -39,9 +40,10 @@ class BuscarPartidaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         buscarPartidas()
         iniciarRecyclerView()
-        //TODO: Metodo que actualice la lista de partidas disponibles cada x tiempo
-        //TODO: RecicleView con las partidas disponibles
-        //TODO: Al pulsar una partida, se unira a ella (llamada retrofit)
+        partidasDisponibles()
+
+
+
     }
 
     private fun buscarPartidas() {
@@ -72,5 +74,39 @@ class BuscarPartidaFragment : Fragment() {
         binding.rvPartidasAbiertas.adapter = adapter
     }
 
+    //Metodo que actualice la lista de partidas disponibles cada x tiempo
+    private fun actualizarListaPartidas() {
+
+    }
+
+    //RecicleView con las partidas disponibles
+    private fun partidasDisponibles() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val call = RetrofitHelper.getRetrofit().create(PartyApiClient::class.java).getPartiesByState()
+
+            if (call.isSuccessful) {
+                val list = call.body()!!
+                val openParties = list.filter { it.status == "open" }
+                if (openParties.size != partyList.size) {
+                    partyList.clear()
+                    partyList.addAll(openParties)
+                    activity?.runOnUiThread {
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            } else {
+                activity?.runOnUiThread {
+                    Toast.makeText(context, "Error al buscar partidas", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+    //Al pulsar una partida, se unira a ella (llamada retrofit)
+    private fun unirseAPartida() {
+
+    }
 
 }
