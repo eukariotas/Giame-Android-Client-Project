@@ -32,4 +32,10 @@ interface PartyApiClient {
      */
     @GET("partida/open")
     suspend fun getOpenParties(): Response<List<PartyModel>>
+
+    /**
+     * Función que se usará para obtener el estado de las partidas
+     */
+    @GET("partida/open")
+    suspend fun getPartiesByState(): Response<List<PartyModel>>
 }
