@@ -9,15 +9,24 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.show
+import com.badlogic.gdx.scenes.scene2d.ui.*
+import es.eukariotas.giame.ConexionFragment
+import es.eukariotas.giame.core.RetrofitHelper
 
 import es.eukariotas.giame.game.ajedrez.Object.CasilaAjedrez
 import es.eukariotas.giame.game.ajedrez.Object.FichaAjedrez
+import es.eukariotas.giame.persistence.DataBaseProv
+import es.eukariotas.giame.persistence.data.apiclient.PartyApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AjedrezController: ApplicationAdapter() {
+    private lateinit var stage: Stage
+
     //las distintas texturas que se van a usar
     lateinit var texturaLadrillo: Texture
     lateinit var celdaNegraTexture:Texture
@@ -50,6 +59,21 @@ class AjedrezController: ApplicationAdapter() {
      */
     @Override
     override fun create() {
+        stage = Stage()
+        if (ConexionFragment.tipoJuego.equals("online")){
+            modo = "online"
+            if (DataBaseProv.playerNum == 1){
+                color = "blanco"
+            }else{
+                color = "negro"
+            }
+
+            estado = "open"
+            esperarContrario()
+        }
+
+
+
         tamañoCelda = Gdx.graphics.width.toFloat() / 8//se calcula el tamaño de las celdas
         //texturas
         texturaLadrillo = Texture(Gdx.files.internal("infterface.png"))
@@ -92,6 +116,9 @@ class AjedrezController: ApplicationAdapter() {
 
         override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
             //recogemos la posicion de la casilla que se ha tocado
+            if (estado.equals("open")){
+
+            }else{
             val x = Gdx.input.x
             val y = (Gdx.input.y-Gdx.graphics.height)*-1
             println("tocado en ${x} ${y}")//se indica donde se ha tocado
@@ -113,7 +140,7 @@ class AjedrezController: ApplicationAdapter() {
                 if (fichaSeleccionada !=null){
                     //si se ha pulsado sobre una ficha
                     if (fichaPulsada!=null){
-                        if (fichaPulsada!!.color== turnoColor()){
+                        if (fichaPulsada!!.color== turnoColor()&& turnoColor().equals(color)){
                         //se ponen las celdas de su color original
                         if (posiblesPosiciones != null){
                             for (posicion in posiblesPosiciones){
@@ -212,14 +239,19 @@ class AjedrezController: ApplicationAdapter() {
                 //TODO controlar la interfaz
                 println("se ha pulsado fuera del tablero")
             }
+            }
           return true
         }
+
         }
     }
 
 
 
     companion object{
+        var estado = "started"
+        var color: String = "blanco"
+        var modo = "maquina"
         var posicionInicialY = 0f
         var tamañoCelda = 0f
         var turno = 1
@@ -238,32 +270,15 @@ class AjedrezController: ApplicationAdapter() {
                 return "blanco"
             }
         }
-
-        fun getKeyOfCell(cell:CasilaAjedrez):String{
-            for (celda in tablero){
-                if (celda.value == cell){
-                    return celda.key
-                }
-            }
-            return ""
-        }
-        fun getKeyOfFicha(ficha:FichaAjedrez):String{
-            for (fichaa in fichas){
-                if (fichaa.value == ficha){
-                    return fichaa.key
-                }
-            }
-            return ""
-        }
-
-
-
     }
 
     override fun render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
+
         printTablero(tamañoCelda)
         pintarInterfaz()
+
     }
 
     /**
@@ -930,5 +945,24 @@ class AjedrezController: ApplicationAdapter() {
 
         return tabla
 
+    }
+
+    fun getPartida(){
+
+    }
+
+    fun esperarContrario() {
+        CoroutineScope(Dispatchers.IO).launch {
+            while (estado.equals("open")){
+                delay(1000)
+                val call = RetrofitHelper.getRetrofit().create(PartyApiClient::class.java).getParty(DataBaseProv.partidaActual!!.id)
+                if (call.isSuccessful){
+                    val partida = call.body()
+                    if(partida!=null){
+                        estado = partida.status
+                    }
+                }
+            }
+        }
     }
 }
