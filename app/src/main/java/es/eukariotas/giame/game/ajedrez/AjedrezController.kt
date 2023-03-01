@@ -19,10 +19,10 @@ import es.eukariotas.giame.game.ajedrez.Object.CasilaAjedrez
 import es.eukariotas.giame.game.ajedrez.Object.FichaAjedrez
 import es.eukariotas.giame.persistence.DataBaseProv
 import es.eukariotas.giame.persistence.data.apiclient.PartyApiClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import es.eukariotas.giame.persistence.data.apiclient.TurnApiClient
+import es.eukariotas.giame.persistence.data.model.TurnModel
+import es.eukariotas.giame.persistence.database.entities.TurnEntity
+import kotlinx.coroutines.*
 
 class AjedrezController: ApplicationAdapter() {
     private lateinit var stage: Stage
@@ -261,7 +261,27 @@ class AjedrezController: ApplicationAdapter() {
         val posicionPantalla = mutableMapOf<String, Vector2>()//por casa posicion del tablero almacenamos su posicion en la pantalla
 
         fun incrementarTurno(){
-            turno++
+            if(modo.equals("online")){
+                var posiciones = tableroToFen()
+                var turnoToSave =TurnModel(1, posiciones, turno,false, DataBaseProv.partidaActual!!)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val call = RetrofitHelper.getRetrofit().create(TurnApiClient::class.java).saveTurno(turnoToSave)
+                            val response = call.execute()
+                            if(response.isSuccessful){
+                                val turno = response.body()
+                                println("Turno guardado")
+                            }else{
+                                println("Error al guardar el turno")
+                            }
+
+
+                }
+
+            }else{
+                turno++
+            }
+
         }
         fun turnoColor():String{
             if (turno%2==0){
@@ -269,6 +289,38 @@ class AjedrezController: ApplicationAdapter() {
             }else{
                 return "blanco"
             }
+        }
+
+        fun tableroToFen():String{
+            val filas = "12345678"
+            val columnas = "abcdefgh"
+            var fen = ""
+            var contador = 0
+            for (i in 1..8){
+                for (j in 0..7){
+                    var posicion = columnas.get(j)+"-"+i
+                    println("posicion: "+posicion)
+                    if (fichas.get(posicion)!=null){
+                        if (contador!=0){
+                            fen+=contador.toString()
+                            contador = 0
+                        }
+                        fen+= fichas[posicion]!!.getInicial()
+                    }else{
+                        contador++
+                    }
+                    if (j==7){
+                        if (contador!=0){
+                            fen+=contador.toString()
+                            contador = 0
+                        }
+                        if (i!=8){
+                            fen+="/"
+                        }
+                    }
+                }
+            }
+            return fen
         }
     }
 

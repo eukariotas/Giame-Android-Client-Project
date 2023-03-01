@@ -2,6 +2,7 @@ package es.eukariotas.giame.persistence
 
 import es.eukariotas.giame.persistence.data.model.PartyModel
 import es.eukariotas.giame.persistence.data.model.UserModel
+import es.eukariotas.giame.persistence.database.entities.PartyEntity
 
 class DataBaseProv {
     companion object{

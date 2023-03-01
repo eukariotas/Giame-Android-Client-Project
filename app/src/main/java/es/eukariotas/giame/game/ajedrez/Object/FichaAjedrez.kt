@@ -14,6 +14,29 @@ data class FichaAjedrez(
     /**
      * Funcion que devuelve las posiciones a las que puede moverse la ficha
      */
+    fun getInicial():String{
+        var letra = ""
+        if (this.color == "blanco"){
+            when(this.tipo){
+                "peon" -> letra="P"
+                "torre" -> letra="R"
+                "caballo" -> letra="N"
+                "alfil" -> letra="B"
+                "reina" -> letra="Q"
+                "rey" -> letra="K"
+            }
+        }else{
+            when(this.tipo){
+                "peon" -> letra="p"
+                "torre" -> letra="r"
+                "caballo" -> letra="n"
+                "alfil" ->  letra="b"
+                "reina" -> letra="q"
+                "rey" -> letra="k"
+            }
+        }
+        return letra
+    }
     fun getPosiblePosition(posicion:String):List<String>{
             when (this.tipo) {
                 "peon" -> return posibleMovePeon(posicion)
