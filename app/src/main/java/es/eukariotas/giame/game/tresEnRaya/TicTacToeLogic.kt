@@ -219,37 +219,33 @@ binding.button8.setOnClickListener { clickfun(it) }
             return 0
         }
 
-    fun robot() {
-        // Check for winning moves for the opponent
-        for (cell in emptyCells) {
-
-            if ((player1.containsAll(listOf(cell, cell+1, cell+2)) ||
-                        player1.containsAll(listOf(cell+3, cell+4, cell+5)) ||
-                        player1.containsAll(listOf(cell+6, cell+7, cell+8))) &&
-                !player2.containsAll(listOf(cell, cell+1, cell+2, cell+3, cell+4, cell+5, cell+6, cell+7, cell+8))) {
-                selectCell(cell)
-                return
-            }
-            if ((player1.containsAll(listOf(cell, cell+3, cell+6)) ||
-                        player1.containsAll(listOf(cell+1, cell+4, cell+7)) ||
-                        player1.containsAll(listOf(cell+2, cell+5, cell+8))) &&
-                !player2.containsAll(listOf(cell, cell+1, cell+2, cell+3, cell+4, cell+5, cell+6, cell+7, cell+8))) {
-                selectCell(cell)
-                return
-            }
-            if ((player1.containsAll(listOf(cell, cell+4, cell+8)) ||
-                        player1.containsAll(listOf(cell+2, cell+4, cell+6))) &&
-                !player2.containsAll(listOf(cell, cell+2, cell+4, cell+6, cell+8))) {
-                selectCell(cell)
-                return
-            }
-        }
-        // If no winning moves for the opponent, select a random cell
+    fun robot()
+    {
         val rnd = (1..9).random()
-        if (emptyCells.contains(rnd))
+        if(emptyCells.contains(rnd))
             robot()
         else {
-            selectCell(rnd)
+            val buttonselected : Button?
+            buttonselected = when(rnd) {
+                1 -> binding.button
+                2 -> binding.button2
+                3 -> binding.button3
+                4 -> binding.button4
+                5 -> binding.button5
+                6 -> binding.button6
+                7 -> binding.button7
+                8 -> binding.button8
+                9 -> binding.button9
+                else -> {binding.button}
+            }
+            emptyCells.add(rnd);
+            buttonselected.text = "O"
+            buttonselected.setTextColor(Color.parseColor("#D22BB804"))
+            player2.add(rnd)
+            buttonselected.isEnabled = false
+            var checkWinner = checkWinner()
+            if(checkWinner == 1)
+                Handler().postDelayed(Runnable { reset() } , 2000)
         }
     }
 
@@ -270,10 +266,11 @@ binding.button8.setOnClickListener { clickfun(it) }
             }
         }
         buttonSelected.isEnabled = false
-        buttonSelected.text = "O"
-        player2.add(cell)
+        buttonSelected.text = "X"
+        player1.add(cell)
         emptyCells.remove(cell)
         checkWinner()
+        robot()
     }
 
 
