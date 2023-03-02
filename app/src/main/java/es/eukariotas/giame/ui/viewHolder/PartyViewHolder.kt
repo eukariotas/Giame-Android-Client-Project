@@ -35,7 +35,7 @@ class PartyViewHolder(val binding: ItemPartidaBinding):
                         if (partyModel != null){
                             CoroutineScope(Dispatchers.Main).launch {
                                 DataBaseProv.partidaActual = partyModel
-                                DataBaseProv.playerNum = 2
+                                DataBaseProv.playerNum = 1
                                 when(ConexionFragment.juego){
                                     "ajedrez" -> startActivity(binding.root.context, Intent(binding.root.context, AjedrezLauncher::class.java), null)
                                     "aviones" -> startActivity(binding.root.context, Intent(binding.root.context, AvionesLauncher::class.java), null)

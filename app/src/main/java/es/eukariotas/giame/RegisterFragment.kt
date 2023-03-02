@@ -44,7 +44,7 @@ class RegisterFragment : Fragment() {
 
     fun register(){
         val user = binding.etUserNameRegister.text.toString()
-        val pass = md5.encrypt(binding.etPassRegister.text.toString())
+        val pass = binding.etPassRegister.text.toString()
         val email = binding.etEmailRegister.text.toString()
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitHelper.getRetrofit().create(UserApiClient::class.java).register(user, pass, email)

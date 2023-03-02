@@ -73,7 +73,7 @@ class ConexionFragment : Fragment() {
                 val header = call.headers()
                 if(call.isSuccessful){
                     if (response != null) {
-                        DataBaseProv.playerNum = 1
+                        DataBaseProv.playerNum = 0
                         DataBaseProv.partidaActual= response
                         CoroutineScope(Dispatchers.Main).launch {
                             Snackbar.make(view, "Partida creada ${response.id}, ${response.tipeGame}, ${response.status}", Snackbar.LENGTH_LONG).show()

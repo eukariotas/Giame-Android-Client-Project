@@ -65,19 +65,18 @@ class AjedrezController: ApplicationAdapter() {
         stage = Stage()
         if (ConexionFragment.tipoJuego.equals("online")){
             modo = "online"
-            if (DataBaseProv.playerNum == 1){
+            estado = "open"
+            if (DataBaseProv.playerNum == 0){
+                esperarContrario()
                 color = "blanco"
             }else{
+                estado = DataBaseProv.partidaActual!!.status
                 color = "negro"
-            }
-
-            estado = "open"
-            if(DataBaseProv.playerNum == 1){
-                esperarContrario()
-            }
-            if(DataBaseProv.playerNum == 2){
                 esperarSiguienteTurno()
             }
+
+
+
         }
 
 
@@ -125,7 +124,7 @@ class AjedrezController: ApplicationAdapter() {
         override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
             //recogemos la posicion de la casilla que se ha tocado
             if (estado.equals("open")){
-
+                println("no se puede mover")
             }else{
             val x = Gdx.input.x
             val y = (Gdx.input.y-Gdx.graphics.height)*-1
@@ -136,10 +135,17 @@ class AjedrezController: ApplicationAdapter() {
                 if (celda.value.boundingRectangle.contains(x.toFloat(),y.toFloat())){
                     celdaPulsada = celda.value
                     posicionCeldaPulsada = celda.key
-                    println("celda pulsada ${celda.key}")
+
                 }
             }
             //si se ha pulsado dentro del tablero se abra pulsado una celda
+            //si es el turno del jugador se puede seleccionar una ficha
+            //si el turno es par se mueve el jugador 1 y si es impar el jugador 2
+                println(DataBaseProv.playerNum)
+                println(turno%2)
+                println(turno)
+            if(turno%2 == DataBaseProv.playerNum||ConexionFragment.tipoJuego.equals("maquina"))
+            {
             if(celdaPulsada!=null){
                 //se detecta si se ha pulsado sobre una ficha
                 fichaPulsada = fichas[posicionCeldaPulsada]
@@ -148,7 +154,7 @@ class AjedrezController: ApplicationAdapter() {
                 if (fichaSeleccionada !=null){
                     //si se ha pulsado sobre una ficha
                     if (fichaPulsada!=null){
-                        if (fichaPulsada!!.color== turnoColor()&& turnoColor().equals(color)){
+                        if (fichaPulsada!!.color== turnoColor()){
                         //se ponen las celdas de su color original
                         if (posiblesPosiciones != null){
                             for (posicion in posiblesPosiciones){
@@ -248,6 +254,7 @@ class AjedrezController: ApplicationAdapter() {
                 println("se ha pulsado fuera del tablero")
             }
             }
+            }
           return true
         }
 
@@ -262,7 +269,7 @@ class AjedrezController: ApplicationAdapter() {
         var modo = "maquina"
         var posicionInicialY = 0f
         var tamañoCelda = 0f
-        var turno = 1
+        var turno = 0
         var spriteList = mutableListOf<Sprite>()
         var tablero = mutableMapOf<String, CasilaAjedrez>()
         var fichas = mutableMapOf<String, FichaAjedrez>()
@@ -291,15 +298,20 @@ class AjedrezController: ApplicationAdapter() {
                     var nuevo = false
                     while (!nuevo){
                         delay(1000)
+                        println("esperando")
                         val call = RetrofitHelper.getRetrofit().create(PartyApiClient::class.java).getTurn(DataBaseProv.partidaActual!!.id)
                         if (call.isSuccessful){
                             val turnos = call.body()
                             if (turnos!=null){
-                                if (turnos.size == turno){
+                                if (turnos.size == turno+1){
                                     for (turn in turnos){
                                         if (turn.numTurn == turno){
                                             nuevo = true
-                                            fenToTablero(turn.informacion)
+                                            if(DataBaseProv.playerNum==0){
+                                                fenToTableroAnfitrion(turn.informacion)
+                                            }else{
+                                                fenToTablero(turn.informacion)
+                                            }
                                             turno++
                                         }
                                     }
@@ -316,9 +328,9 @@ class AjedrezController: ApplicationAdapter() {
         }
         fun turnoColor():String{
             if (turno%2==0){
-                return "negro"
-            }else{
                 return "blanco"
+            }else{
+                return "negro"
             }
         }
 
@@ -393,6 +405,48 @@ class AjedrezController: ApplicationAdapter() {
                 filaActual--
            }
         }
+        fun fenToTableroAnfitrion(fen: String) {
+            fichas.clear()
+            var filanFen = fen.split("/")
+            val filas = "12345678"
+            val columnas = "abcdefgh"
+            var filaActual = 1 // Cambiado de 8 a 1
+            var columnaActual = 0
+
+            for (i in filanFen.indices.reversed()){ // Cambiado a recorrer las filas al revés
+                val filaFen = filanFen[i]
+                for (j in filaFen.indices.reversed()){ // Cambiado a recorrer las columnas al revés
+                    val caracter = filaFen[j]
+                    if (caracter.isDigit()){
+                        columnaActual+=caracter.toString().toInt()
+                    }else{
+                        var posicion = columnas.get(columnaActual)+"-"+filaActual
+                        var color = "blanco"
+                        var tipo = ""
+                        if (caracter.isUpperCase()){
+                            color = "blanco"
+                        }else{
+                            color =  "negro"
+                        }
+                        when(caracter.toLowerCase()){
+                            'p' -> tipo = "peon"
+                            'r' -> tipo = "torre"
+                            'n' -> tipo = "caballo"
+                            'b' -> tipo = "alfil"
+                            'q' -> tipo = "reina"
+                            'k' -> tipo = "rey"
+                        }
+                        var ficha = FichaAjedrez(color,tipo)
+                        ficha.setPosition(posicionPantalla.get(posicion)!!.x,posicionPantalla.get(posicion)!!.y)
+                        ficha.setSize(tamañoCelda-10,tamañoCelda-10)
+                        fichas.put(posicion,ficha)
+                        columnaActual++
+                    }
+                }
+                columnaActual = 0
+                filaActual++ // Cambiado a avanzar hacia la octava fila
+            }
+        }
     }
 
     override fun render() {
@@ -401,7 +455,7 @@ class AjedrezController: ApplicationAdapter() {
             setTextureFichas()
         }
 
-        printTablero(tamañoCelda)
+        printTablero()
         pintarInterfaz()
 
     }
@@ -978,7 +1032,7 @@ class AjedrezController: ApplicationAdapter() {
         }
         return FichaAjedrez("vacía","n/a")
     }
-    fun printTablero(tamañoCelda: Float) {
+    fun printTablero() {
         spriteList.clear()
         batch.begin()
 
@@ -1098,13 +1152,11 @@ class AjedrezController: ApplicationAdapter() {
 
     }
 
-    fun getPartida(){
-
-    }
 
     fun esperarContrario() {
         CoroutineScope(Dispatchers.IO).launch {
             while (estado.equals("open")){
+                println("esperando")
                 delay(1000)
                 val call = RetrofitHelper.getRetrofit().create(PartyApiClient::class.java).getParty(DataBaseProv.partidaActual!!.id)
                 if (call.isSuccessful){
@@ -1126,11 +1178,18 @@ class AjedrezController: ApplicationAdapter() {
                 if (call.isSuccessful){
                     val turnos = call.body()
                     if (turnos!=null){
-                        if (turnos.size == turno){
+                        if (turnos.size == turno+1){
                             for (turn in turnos){
                                 if (turn.numTurn == turno){
                                     nuevo = true
-                                    fenToTablero(turn.informacion)
+                                    println(turn.informacion)
+                                    if(DataBaseProv.playerNum==0){
+                                        fenToTableroAnfitrion(turn.informacion)
+
+                                    }else{
+                                        fenToTablero(turn.informacion)
+
+                                    }
                                     turno++
                                 }
                             }

@@ -17,6 +17,7 @@
 */
 
 #include <iostream>
+#include <jni.h>
 
 #include "bitboard.h"
 #include "endgame.h"
@@ -51,3 +52,13 @@ int main(int argc, char* argv[]) {
   Threads.set(0);
   return 0;
 }
+
+extern "C" {
+
+JNIEXPORT void JNICALL Java_es_eukariotas_giame_ui_MainActivity_startChessGame(JNIEnv *env, jobject thiz) {
+    main(0, NULL);
+    }
+
+}
+
+
