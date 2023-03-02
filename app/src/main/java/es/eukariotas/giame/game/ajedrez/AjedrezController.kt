@@ -75,6 +75,9 @@ class AjedrezController: ApplicationAdapter() {
             if(DataBaseProv.playerNum == 1){
                 esperarContrario()
             }
+            if(DataBaseProv.playerNum == 2){
+                esperarSiguienteTurno()
+            }
         }
 
 
@@ -272,11 +275,37 @@ class AjedrezController: ApplicationAdapter() {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val call = RetrofitHelper.getRetrofit().create(TurnApiClient::class.java).saveTurno(turnoToSave)
-                    val response = call.execute()
-                    if(response.isSuccessful){
-                        println("guardado")
-                    }else{
-                        println("error")
+                    try {
+                        val response = call.execute()
+                        if (response.isSuccessful) {
+                            println("guardado")
+                        } else {
+                            println("error")
+                        }
+                    }catch (e: Exception){
+                        println(e)
+                    }
+                }
+                turno++
+                CoroutineScope(Dispatchers.IO).launch {
+                    var nuevo = false
+                    while (!nuevo){
+                        delay(1000)
+                        val call = RetrofitHelper.getRetrofit().create(PartyApiClient::class.java).getTurn(DataBaseProv.partidaActual!!.id)
+                        if (call.isSuccessful){
+                            val turnos = call.body()
+                            if (turnos!=null){
+                                if (turnos.size == turno){
+                                    for (turn in turnos){
+                                        if (turn.numTurn == turno){
+                                            nuevo = true
+                                            fenToTablero(turn.informacion)
+                                            turno++
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -324,15 +353,83 @@ class AjedrezController: ApplicationAdapter() {
             }
             return fen
         }
+        fun fenToTablero(fen: String) {
+            fichas.clear()
+            var filanFen = fen.split("/")
+            val filas = "12345678"
+            val columnas = "abcdefgh"
+            var filaActual = 8
+            var columnaActual = 0
+
+           for (filaFen in filanFen){
+                for (caracter in filaFen){
+                     if (caracter.isDigit()){
+                          columnaActual+=caracter.toString().toInt()
+                     }else{
+                          var posicion = columnas.get(columnaActual)+"-"+filaActual
+                          var color = "blanco"
+                          var tipo = ""
+                          if (caracter.isUpperCase()){
+                              color = "blanco"
+                          }else{
+                              color =  "negro"
+                          }
+                            when(caracter.toLowerCase()){
+                                'p' -> tipo = "peon"
+                                'r' -> tipo = "torre"
+                                'n' -> tipo = "caballo"
+                                'b' -> tipo = "alfil"
+                                'q' -> tipo = "reina"
+                                'k' -> tipo = "rey"
+                            }
+                          var ficha = FichaAjedrez(color,tipo)
+                          ficha.setPosition(posicionPantalla.get(posicion)!!.x,posicionPantalla.get(posicion)!!.y)
+                          ficha.setSize(tamañoCelda-10,tamañoCelda-10)
+                          fichas.put(posicion,ficha)
+                          columnaActual++
+                     }
+                }
+                columnaActual = 0
+                filaActual--
+           }
+        }
     }
 
     override fun render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-
+        if (ConexionFragment.tipoJuego.equals("online")){
+            setTextureFichas()
+        }
 
         printTablero(tamañoCelda)
         pintarInterfaz()
 
+    }
+
+    fun setTextureFichas(){
+        var texture =fichaPeonBlancoTexture
+        for(ficha in fichas){
+            if (ficha.value.color=="blanco"){
+               when(ficha.value.tipo){
+                   "peon" -> texture = fichaPeonBlancoTexture
+                   "torre" -> texture = fichaTorreBlancaTexture
+                   "caballo" -> texture = fichaCaballoBlancoTexture
+                   "alfil" -> texture = fichaAlfilBlancoTexture
+                   "reina" -> texture = fichaReinaBlancaTexture
+                   "rey" -> texture = fichaReyBlancoTexture
+               }
+            }else{
+                when(ficha.value.tipo){
+                    "peon" -> texture = fichaPeonNegroTexture
+                    "torre" -> texture = fichaTorreNegraTexture
+                    "caballo" -> texture = fichaCaballoNegroTexture
+                    "alfil" -> texture = fichaAlfilNegroTexture
+                    "reina" -> texture = fichaReinaNegraTexture
+                    "rey" -> texture = fichaReyNegroTexture
+                }
+            }
+            ficha.value.texture = texture
+        }
     }
 
     /**
@@ -1014,6 +1111,30 @@ class AjedrezController: ApplicationAdapter() {
                     val partida = call.body()
                     if(partida!=null){
                         estado = partida.status
+                    }
+                }
+            }
+        }
+    }
+
+    fun esperarSiguienteTurno(){
+        CoroutineScope(Dispatchers.IO).launch {
+            var nuevo = false
+            while (!nuevo){
+                delay(1000)
+                val call = RetrofitHelper.getRetrofit().create(PartyApiClient::class.java).getTurn(DataBaseProv.partidaActual!!.id)
+                if (call.isSuccessful){
+                    val turnos = call.body()
+                    if (turnos!=null){
+                        if (turnos.size == turno){
+                            for (turn in turnos){
+                                if (turn.numTurn == turno){
+                                    nuevo = true
+                                    fenToTablero(turn.informacion)
+                                    turno++
+                                }
+                            }
+                        }
                     }
                 }
             }

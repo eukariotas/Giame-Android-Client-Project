@@ -16,7 +16,7 @@ interface PartyApiClient {
      * Función que se usará para obtener el turno actual de una partida
      */
     @GET("partida/turnos/{party_id}")
-    suspend fun getTurn(@Path("party_id") idPartida: Int): Response<TurnModel>
+    suspend fun getTurn(@Path("party_id") idPartida: Int): Response<List<TurnModel>>
     /**
      * Función que se usará para unirse a una partida
      */

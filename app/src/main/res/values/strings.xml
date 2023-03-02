@@ -58,6 +58,9 @@
     <string name="Buscar_partida">Buscar partida</string>
     <string name="seleccionaIdioma">Selecciona un idioma</string>
     <string name="ProbarConexion">Probar conexion</string>
+    <string name="Registrar">Registrar</string>
+    <string name="Limpiar">Limpiar</string>
+    <string name="email">Email</string>
     <array name="idiomas">
         <item>English</item>
         <item>Español</item>

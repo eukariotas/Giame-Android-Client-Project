@@ -43,12 +43,7 @@ class LoginFragment : Fragment() {
             }
         }
         binding.btSingIn.setOnClickListener {
-            try {
-                val h = ping("192.168.5.182")
-                Snackbar.make(view, "Ping: ${h}", Snackbar.LENGTH_LONG).show()
-            }catch (e: Exception){
-                Snackbar.make(view, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
-            }
+           findNavController().navigate(R.id.action_LoginFragment_to_RegisterFragment)
         }
     }
     fun ping(ip: String): Boolean {

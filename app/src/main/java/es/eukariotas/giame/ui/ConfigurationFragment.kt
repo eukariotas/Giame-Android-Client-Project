@@ -77,7 +77,7 @@ class ConfigurationFragment : Fragment() {
     companion object {
     //leer estos datos de la base de datos
     //tambien guardarlos al cambiar
-        var serverIp = "185.198.110.134"
+        var serverIp = "192.168.101.254"
         var serverPort = "8081"
     }
     fun cambiarIdioma() {
